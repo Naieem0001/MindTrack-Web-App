@@ -5,11 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MindTrack - Dashboard</title>
     <meta name="api-base" content="https://mindtrack-g2ri.onrender.com" />
-    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Bootstrap and Tailwind -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Font -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
       body {
         font-family: 'Outfit', sans-serif;
@@ -23,9 +27,10 @@
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
         transition: transform 0.3s ease, box-shadow 0.3s ease;
       }
-      .glass-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+      .glass-navbar {
+        background: rgba(15, 23, 42, 0.8);
+        backdrop-filter: blur(15px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       }
       .glass-input {
         background: rgba(255, 255, 255, 0.05);
@@ -39,14 +44,9 @@
         color: white;
         box-shadow: 0 0 0 4px rgba(167, 139, 250, 0.2);
       }
-      .glass-input::placeholder {
-        color: rgba(255, 255, 255, 0.5);
-      }
-      /* specific style for select options since they might look ugly with dark background */
-      select.glass-input option {
-        background: #1e1b4b;
-        color: white;
-      }
+      .glass-input::placeholder { color: rgba(255, 255, 255, 0.5); }
+      select.glass-input option { background: #1e1b4b; color: white; }
+      
       .btn-primary-gradient {
         background: linear-gradient(135deg, #8b5cf6, #3b82f6);
         border: none;
@@ -56,73 +56,129 @@
         transform: translateY(-2px);
         box-shadow: 0 10px 20px rgba(139, 92, 246, 0.3);
       }
-      .btn-glass {
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+
+      /* Chat Offcanvas Styling */
+      .glass-offcanvas {
+        background: rgba(15, 23, 42, 0.95) !important;
+        backdrop-filter: blur(20px);
+        border-left: 1px solid rgba(255, 255, 255, 0.1);
         color: white;
-        transition: all 0.2s;
       }
-      .btn-glass:hover {
-        background: rgba(255, 255, 255, 0.2);
+      .chat-bubble-user {
+        background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+        border-radius: 18px 18px 0px 18px;
+        padding: 10px 16px;
+        color: #fff;
+        max-width: 85%;
+        margin-left: auto;
+      }
+      .chat-bubble-ai {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 18px 18px 18px 0px;
+        padding: 10px 16px;
+        color: #fff;
+        max-width: 85%;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+      }
+      
+      /* Utilities */
+      .hide-scroll::-webkit-scrollbar { display: none; }
+      .fab-chat {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        z-index: 1040;
+        box-shadow: 0 4px 20px rgba(139, 92, 246, 0.5);
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #a855f7, #6366f1);
         color: white;
+        transition: transform 0.2s ease;
+        border: 2px solid rgba(255,255,255,0.2);
+      }
+      .fab-chat:hover {
+        transform: scale(1.05);
+        color: white;
+      }
+
+      @media (max-width: 768px) {
+        .glass-card { margin-bottom: 1rem; }
+        .fab-chat { bottom: 16px; right: 16px; }
       }
     </style>
   </head>
-  <body class="min-h-screen bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-slate-900 via-indigo-950 to-slate-950 text-white">
-    <div class="container py-5">
-      <!-- Header -->
-      <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-5 border-bottom border-white/10 pb-4">
-        <div>
-          <h1 class="text-3xl font-bold mb-1 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-indigo-400">MindTrack Dashboard</h1>
-          <div class="text-white/60 text-sm font-medium">
-            Let's see how you're doing today.
-          </div>
-        </div>
-        <button class="btn btn-glass px-4 rounded-pill fw-medium" onclick="logout()">
-          Log out
+  <body class="bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-slate-900 via-indigo-950 to-slate-950 text-white min-h-screen pb-5">
+    
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg glass-navbar sticky-top px-3 py-3">
+      <div class="container-fluid">
+        <a class="navbar-brand text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-indigo-400 d-flex align-items-center gap-2" href="#">
+          MindTrack
+        </a>
+        <button class="navbar-toggler border-white/20" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/></svg>
         </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0 mt-3 mt-lg-0 gap-2 ms-lg-4">
+            <li class="nav-item">
+              <a class="nav-link text-white/80 hover:text-white" href="#dashboard">Dashboard</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white/80 hover:text-white" href="#appointments">Appointments</a>
+            </li>
+          </ul>
+          <button class="btn btn-outline-danger btn-sm rounded-pill px-4 mt-2 mt-lg-0 fw-medium" onclick="logout()">
+            Log out
+          </button>
+        </div>
       </div>
+    </nav>
 
-      <!-- Main Layout -->
-      <div class="row g-4">
-        
+    <!-- Main Content -->
+    <div class="container-fluid px-3 px-lg-5 pt-4 mt-3" id="dashboard">
+      
+      <div class="row g-4 mb-4">
         <!-- Daily Check-in -->
-        <div class="col-lg-5">
-          <div class="card p-4 glass-card rounded-4 h-100">
+        <div class="col-12 col-xl-5">
+          <div class="card p-4 glass-card rounded-4 h-100 border-t-2 border-t-purple-500/50">
             <h2 class="h5 mb-4 font-semibold text-purple-300">Daily Check-in</h2>
             <div class="row g-3">
-              <div class="col-6">
-                <label class="text-xs text-white/60 mb-1 ms-1">Mood (1-5)</label>
-                <input id="mood" type="number" min="1" max="5" class="form-control glass-input rounded-3" placeholder="1 = low, 5 = high" />
+              <div class="col-6 col-sm-4">
+                <label class="text-xs text-white/60 mb-1 ms-1">Mood</label>
+                <input id="mood" type="number" min="1" max="5" class="form-control glass-input rounded-3 form-control-sm" placeholder="1-5" />
               </div>
-              <div class="col-6">
-                <label class="text-xs text-white/60 mb-1 ms-1">Stress (1-5)</label>
-                <input id="stress" type="number" min="1" max="5" class="form-control glass-input rounded-3" placeholder="1 = low, 5 = high" />
+              <div class="col-6 col-sm-4">
+                <label class="text-xs text-white/60 mb-1 ms-1">Stress</label>
+                <input id="stress" type="number" min="1" max="5" class="form-control glass-input rounded-3 form-control-sm" placeholder="1-5" />
               </div>
-              <div class="col-6">
-                <label class="text-xs text-white/60 mb-1 ms-1">Anxiety (1-5)</label>
-                <input id="anxiety" type="number" min="1" max="5" class="form-control glass-input rounded-3" placeholder="1 = low, 5 = high" />
+              <div class="col-6 col-sm-4">
+                <label class="text-xs text-white/60 mb-1 ms-1">Anxiety</label>
+                <input id="anxiety" type="number" min="1" max="5" class="form-control glass-input rounded-3 form-control-sm" placeholder="1-5" />
               </div>
-              <div class="col-6">
-                <label class="text-xs text-white/60 mb-1 ms-1">Sleep (1-5)</label>
-                <input id="sleep" type="number" min="1" max="5" class="form-control glass-input rounded-3" placeholder="1 = low, 5 = high" />
+              <div class="col-6 col-sm-6">
+                <label class="text-xs text-white/60 mb-1 ms-1">Sleep</label>
+                <input id="sleep" type="number" min="1" max="5" class="form-control glass-input rounded-3 form-control-sm" placeholder="1-5" />
               </div>
-              <div class="col-sm-6">
-                <label class="text-xs text-white/60 mb-1 ms-1">Energy (1-5)</label>
-                <input id="energy" type="number" min="1" max="5" class="form-control glass-input rounded-3" placeholder="1 = low, 5 = high" />
+              <div class="col-12 col-sm-6">
+                <label class="text-xs text-white/60 mb-1 ms-1">Energy</label>
+                <input id="energy" type="number" min="1" max="5" class="form-control glass-input rounded-3 form-control-sm" placeholder="1-5" />
               </div>
-              <div class="col-sm-6">
-                <label class="text-xs text-white/60 mb-1 ms-1">Date (Optional)</label>
-                <input id="checkinDate" type="date" class="form-control glass-input rounded-3" />
-              </div>
-              <div class="col-12 mt-4">
-                <input id="symptoms" class="form-control glass-input rounded-3" placeholder="Physical Symptoms (e.g., headache, fatigue)" />
+              <div class="col-12 text-sm">
+                <input id="checkinDate" type="date" class="form-control glass-input rounded-3 form-control-sm" />
+                <div class="text-white/40 text-[10px] mt-1 ms-1">Leave blank for today</div>
               </div>
               <div class="col-12">
-                <textarea id="notes" class="form-control glass-input rounded-3" rows="3" placeholder="What happened today? Any thoughts?"></textarea>
+                <input id="symptoms" class="form-control glass-input rounded-3 text-sm" placeholder="Symptoms? (e.g., headache, fever)" />
+              </div>
+              <div class="col-12">
+                <textarea id="notes" class="form-control glass-input rounded-3 text-sm" rows="3" placeholder="What happened today? Write your thoughts..."></textarea>
               </div>
             </div>
-            <button class="btn btn-primary-gradient mt-4 w-100 rounded-3 py-2 fw-medium text-white" onclick="submitCheckin()">
+            <button class="btn btn-primary-gradient mt-4 w-100 rounded-3 py-2 fw-medium text-white shadow-lg shadow-purple-500/20" onclick="submitCheckin()">
               Save Check-in
             </button>
             <div id="checkinMsg" class="mt-3 text-sm text-center fw-medium rounded-3" style="display:none;"></div>
@@ -130,10 +186,10 @@
         </div>
 
         <!-- Weekly / Monthly Trends -->
-        <div class="col-lg-7">
-          <div class="card p-4 glass-card rounded-4 h-100 d-flex flex-column">
-            <div class="d-flex align-items-center justify-content-between mb-4">
-              <h2 class="h5 mb-0 font-semibold text-purple-300">Your Trends</h2>
+        <div class="col-12 col-xl-7">
+          <div class="card p-4 glass-card rounded-4 h-100 d-flex flex-column border-t-2 border-t-indigo-500/50">
+            <div class="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between mb-4 gap-3">
+              <h2 class="h5 mb-0 font-semibold text-indigo-300">Your Trends</h2>
               <div class="d-flex align-items-center gap-3">
                 <div class="text-white/60 text-sm fw-medium" id="totalDaysLabel"></div>
                 <select id="days" class="form-select glass-input rounded-pill px-3 py-1 w-auto text-sm" onchange="loadReport()">
@@ -143,98 +199,126 @@
               </div>
             </div>
             
-            <div class="flex-grow-1 position-relative" style="min-height: 250px;">
+            <div class="flex-grow-1 position-relative w-100" style="min-height: 250px;">
               <canvas id="trendChart"></canvas>
             </div>
             
-            <div class="mt-4 p-3 rounded-3 bg-white/5 border border-white/10 text-sm">
+            <div class="mt-4 p-3 rounded-3 bg-white/5 border border-white/10 text-sm shadow-inner">
               <p id="latestInsight" class="mb-0 text-white/80 fst-italic"></p>
             </div>
 
-            <div class="mt-4 p-3 rounded-3" id="riskSection" style="display: none; background: rgba(0,0,0,0.2);">
+            <!-- Risk Insights -->
+            <div class="mt-4 p-3 rounded-3 border border-white/5" id="riskSection" style="display: none; background: rgba(0,0,0,0.2);">
               <div class="d-flex align-items-center gap-2 mb-2">
-                <span id="riskBadge" class="badge px-3 py-2 rounded-pill font-medium border">Risk: Low</span>
+                <span id="riskBadge" class="badge px-3 py-2 rounded-pill font-medium border text-xs tracking-wide">Risk</span>
                 <span id="riskScore" class="text-sm fw-bold text-white/80"></span>
               </div>
               <p id="riskSummary" class="text-sm text-white/90 mb-2"></p>
               <div>
-                <div class="text-xs text-white/60 text-uppercase fw-bold mb-1 tracking-wider">Recommendations</div>
-                <ul id="riskRecs" class="text-sm text-white/80 mb-0 ps-3"></ul>
+                <div class="text-[10px] text-white/50 text-uppercase fw-bold mb-2 tracking-wider">Recommendations</div>
+                <ul id="riskRecs" class="text-sm text-white/80 mb-0 ps-3 leading-relaxed"></ul>
               </div>
               <p id="riskHelp" class="mt-3 text-sm text-danger-subtle fw-medium mb-0"></p>
             </div>
           </div>
         </div>
+      </div>
 
-        <!-- Safe Support Chatbot -->
-        <div class="col-md-6">
+      <!-- Appointments Row -->
+      <div class="row g-4" id="appointments">
+        
+        <!-- Book Appointment -->
+        <div class="col-12 col-lg-5">
           <div class="card p-4 glass-card rounded-4 h-100">
-            <h2 class="h5 mb-3 font-semibold text-indigo-300 d-flex align-items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-chat-quote-fill" viewBox="0 0 16 16">
-                <path d="M16 8c0 3.866-3.582 7-8 7a9 9 0 0 1-2.347-.306c-.584.296-1.925.864-4.181 1.234-.2.032-.352-.176-.273-.362.354-.836.674-1.95.77-2.966C.744 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7M7.194 6.766a1.7 1.7 0 0 0-.227-.272 1.5 1.5 0 0 0-.469-.324l-.008-.004A1.8 1.8 0 0 0 5.734 6C4.776 6 4 6.746 4 7.667c0 .92.776 1.666 1.734 1.666.343 0 .662-.095.931-.26-.137.382-.39.805-.81 1.22a.405.405 0 0 0 .281.7c1.458-.095 2.532-.82 2.97-1.298a.185.185 0 0 0 .02-.047c.184-.468.271-.977.271-1.558 0-.58-.1-1.118-.203-1.324Zm4.167 0a1.7 1.7 0 0 0-.227-.272 1.5 1.5 0 0 0-.469-.324l-.008-.004A1.8 1.8 0 0 0 9.901 6c-.958 0-1.734.746-1.734 1.667 0 .92.776 1.666 1.734 1.666.343 0 .662-.095.931-.26-.137.382-.39.805-.81 1.22a.405.405 0 0 0 .281.7c1.458-.095 2.532-.82 2.97-1.298a.185.185 0 0 0 .02-.047c.184-.468.271-.977.271-1.558 0-.58-.1-1.118-.203-1.324Z"/>
-              </svg>
-              AI Companion
-            </h2>
-            <textarea
-              id="chatInput"
-              class="form-control glass-input rounded-3 mb-3"
-              rows="3"
-              placeholder="Share how you feel... I'm here to listen."
-            ></textarea>
-            <button class="btn btn-outline-light rounded-pill px-4" onclick="sendChat()">
-              Get Suggestion
-            </button>
-            <div id="chatReply" class="mt-4 text-sm text-white/90 p-3 bg-white/5 border border-white/10 rounded-3 d-none"></div>
-          </div>
-        </div>
-
-        <!-- Appointment Card -->
-        <div class="col-md-6">
-          <div class="card p-4 glass-card rounded-4 h-100">
-            <h2 class="h5 mb-3 font-semibold text-indigo-300 d-flex align-items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-calendar-heart" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M4 .5a.5.5 0 0 0-1 0V1H2a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2h-1V.5a.5.5 0 0 0-1 0V1H4zM1 14V4h14v10a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1m7-6.507c1.564-2.118 4.084-1.037 4.084 1.059 0 1.944-3.15 4.39-4.084 5.39-.934-1-4.084-3.446-4.084-5.39 0-2.096 2.52-3.177 4.084-1.059"/>
-              </svg>
-              Book an Appointment
-            </h2>
+            <h2 class="h5 mb-3 font-semibold text-blue-300">Request Appointment</h2>
             <div class="row g-3">
-              <div class="col-sm-6">
+              <div class="col-12 col-sm-6">
+                <label class="text-xs text-white/60 mb-1 ms-1">Specialist</label>
                 <select id="bookingType" class="form-select glass-input rounded-3 text-sm">
                   <option value="Counsellor">Counsellor</option>
                   <option value="Psychiatrist">Psychiatrist</option>
                 </select>
               </div>
-              <div class="col-sm-6">
-                <input id="bookingLocation" class="form-control glass-input rounded-3 text-sm" placeholder="Location/City" />
+              <div class="col-12 col-sm-6">
+                <label class="text-xs text-white/60 mb-1 ms-1">Location</label>
+                <input id="bookingLocation" class="form-control glass-input rounded-3 text-sm" placeholder="City / Area" />
               </div>
-              <div class="col-sm-6">
-                <input id="preferredTime" class="form-control glass-input rounded-3 text-sm" placeholder="Preferred time (optional)" />
+              <div class="col-12 col-sm-6">
+                <input id="preferredTime" class="form-control glass-input rounded-3 text-sm" placeholder="Preferred time (e.g. 10 AM)" />
               </div>
-              <div class="col-sm-6">
-                <input id="bookingPhone" class="form-control glass-input rounded-3 text-sm" placeholder="Phone (optional)" />
+              <div class="col-12 col-sm-6">
+                <input id="bookingPhone" type="tel" class="form-control glass-input rounded-3 text-sm" placeholder="Phone Number" />
               </div>
               <div class="col-12">
-                <textarea id="bookingMessage" class="form-control glass-input rounded-3 text-sm" rows="2" placeholder="Brief message (optional)"></textarea>
+                <textarea id="bookingMessage" class="form-control glass-input rounded-3 text-sm" rows="2" placeholder="Brief message explaining your need..."></textarea>
               </div>
             </div>
-            <button class="btn btn-primary-gradient mt-4 w-100 rounded-3 py-2 fw-medium text-white" onclick="requestBooking()">
-              Request Demo Appointment
+            <button class="btn btn-outline-light mt-4 w-100 rounded-3 py-2 fw-medium border-white/20 hover:bg-white/10 transition-colors" onclick="requestBooking()">
+              Submit Request
             </button>
             <div id="bookingMsg" class="mt-3 text-sm text-center fw-medium rounded-3" style="display:none;"></div>
           </div>
         </div>
 
-      </div> <!-- End row -->
+        <!-- Appointment History -->
+        <div class="col-12 col-lg-7">
+          <div class="card p-4 glass-card rounded-4 h-100">
+            <h2 class="h5 mb-4 font-semibold text-blue-300 d-flex align-items-center justify-content-between">
+              Your Appointments
+              <button class="btn btn-sm btn-link text-white/50 text-decoration-none" onclick="fetchAppointments()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/><path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/></svg>
+              </button>
+            </h2>
+            <div id="bookingList" class="overflow-auto hide-scroll d-flex flex-column gap-3" style="max-height: 280px;">
+              <div class="text-white/50 text-center text-sm py-5">Loading appointments...</div>
+            </div>
+          </div>
+        </div>
 
-      <div class="mt-5 text-center text-white/50 text-xs px-3">
-        This is a general wellness support tool, not a medical diagnosis. <br/>
-        If you feel unsafe, seek emergency help immediately.
+      </div>
+      
+    </div> <!-- End container -->
+
+    <!-- Floating Action Button for Chatbot -->
+    <button class="fab-chat" type="button" data-bs-toggle="offcanvas" data-bs-target="#chatDrawer" aria-controls="chatDrawer">
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" viewBox="0 0 16 16">
+        <path d="M16 8c0 3.866-3.582 7-8 7a9 9 0 0 1-2.347-.306c-.584.296-1.925.864-4.181 1.234-.2.032-.352-.176-.273-.362.354-.836.674-1.95.77-2.966C.744 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7M7.194 6.766a1.7 1.7 0 0 0-.227-.272 1.5 1.5 0 0 0-.469-.324l-.008-.004A1.8 1.8 0 0 0 5.734 6C4.776 6 4 6.746 4 7.667c0 .92.776 1.666 1.734 1.666.343 0 .662-.095.931-.26-.137.382-.39.805-.81 1.22a.405.405 0 0 0 .281.7c1.458-.095 2.532-.82 2.97-1.298a.185.185 0 0 0 .02-.047c.184-.468.271-.977.271-1.558 0-.58-.1-1.118-.203-1.324Zm4.167 0a1.7 1.7 0 0 0-.227-.272 1.5 1.5 0 0 0-.469-.324l-.008-.004A1.8 1.8 0 0 0 9.901 6c-.958 0-1.734.746-1.734 1.667 0 .92.776 1.666 1.734 1.666.343 0 .662-.095.931-.26-.137.382-.39.805-.81 1.22a.405.405 0 0 0 .281.7c1.458-.095 2.532-.82 2.97-1.298a.185.185 0 0 0 .02-.047c.184-.468.271-.977.271-1.558 0-.58-.1-1.118-.203-1.324Z"/>
+      </svg>
+    </button>
+
+    <!-- AI Chatbot Offcanvas (Slide-out Drawer) -->
+    <div class="offcanvas offcanvas-end glass-offcanvas" tabindex="-1" id="chatDrawer" aria-labelledby="chatDrawerLabel">
+      <div class="offcanvas-header border-bottom border-white/10">
+        <h5 class="offcanvas-title fw-bold text-indigo-300 d-flex align-items-center gap-2" id="chatDrawerLabel">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.25-5v1.5a.25.25 0 0 1-.5 0V11a.25.25 0 0 1 .5 0zM7.5 9.423a1.5 1.5 0 1 1 1 0v.577a.5.5 0 0 1-1 0v-.577zM8.5 6a1.5 1.5 0 1 0-1.5 1.5A1.5 1.5 0 0 0 8.5 6z"/>
+          </svg>
+          AI Companion
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body d-flex flex-column p-0">
+        <!-- Messages Area -->
+        <div id="chatHistory" class="flex-grow-1 p-3 overflow-auto hide-scroll d-flex flex-column gap-3">
+          <div class="chat-bubble-ai text-sm shadow-sm">
+            Hello! I am your AI Companion. I'm here to listen and provide supportive suggestions. How are you feeling today?
+          </div>
+        </div>
+        
+        <!-- Input Area -->
+        <div class="p-3 border-top border-white/10 bg-slate-900/50 backdrop-blur-md">
+          <div class="input-group">
+            <input id="chatInput" type="text" class="form-control glass-input rounded-start-pill py-2 ps-3 border-end-0" placeholder="Type a message..." onkeypress="handleChatEnter(event)">
+            <button class="btn btn-primary-gradient rounded-end-pill px-4" type="button" onclick="sendChat()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="white" viewBox="0 0 16 16"><path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z"/></svg>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
 
     <!-- Chart.js configuration -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Add better default colors to Chart.js globally -->
     <script>
       Chart.defaults.color = 'rgba(255, 255, 255, 0.7)';
       Chart.defaults.font.family = "'Outfit', sans-serif";
@@ -252,6 +336,7 @@
         else {
           window.__mindtrack_token__ = t;
           loadReport();
+          fetchAppointments();
         }
       });
     </script>

@@ -30,3 +30,15 @@ exports.requestBooking = async (req, res) => {
   }
 };
 
+exports.getMyBookings = async (req, res) => {
+  try {
+    const bookings = await BookingRequest.findAll({
+      where: { userId: req.user.id },
+      order: [["createdAt", "DESC"]],
+    });
+    return res.json({ bookings });
+  } catch {
+    return res.status(500).json({ message: "Could not fetch bookings" });
+  }
+};
+

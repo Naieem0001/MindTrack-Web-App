@@ -23,12 +23,12 @@ Give a short, safe, non-clinical response in 3-4 lines with:
 3) when to seek professional support.
 No diagnosis.`;
 
-    const response = await client.responses.create({
-      model: "gpt-4.1-mini",
-      input: prompt,
-      max_output_tokens: 220,
+    const response = await client.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [{ role: "user", content: prompt }],
+      max_tokens: 220,
     });
-    return response.output_text || fallbackDaily();
+    return response.choices[0].message?.content || fallbackDaily();
   } catch {
     return fallbackDaily();
   }
@@ -66,13 +66,15 @@ exports.safeChatReply = async (message) => {
   const client = getClient();
 
   try {
-    const response = await client.responses.create({
-      model: "gpt-4.1-mini",
-      input: `You are a mental wellness support bot. Keep answers safe, short, and practical.
-No diagnosis, no medicine advice. User message: ${message}`,
-      max_output_tokens: 220,
+    const response = await client.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        { role: "system", content: "You are a mental wellness support bot. Keep answers safe, short, and practical. No diagnosis, no medicine advice." },
+        { role: "user", content: message }
+      ],
+      max_tokens: 220,
     });
-    return { reply: response.output_text || fallbackChat, safetyFlag: false };
+    return { reply: response.choices[0].message?.content || fallbackChat, safetyFlag: false };
   } catch {
     return { reply: fallbackChat, safetyFlag: false };
   }
