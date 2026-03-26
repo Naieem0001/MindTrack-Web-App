@@ -1,4 +1,4 @@
-# MindTrack Web App (Hackathon MVP)
+# MindTrack Web App
 
 Mental wellness tracker that supports:
 - Daily mood/stress/sleep/energy check-ins
@@ -14,27 +14,7 @@ Mental wellness tracker that supports:
 - Auth: JWT + bcrypt
 - AI: OpenAI API (optional; app still works with safe fallbacks)
 
-## Local Setup
-1. Install dependencies:
-   - `npm install`
-2. Create environment file:
-   - Copy `.env.example` to `.env` and fill values.
-3. Start server:
-   - `npm run dev`
-4. Open:
-   - `http://localhost:5000`
 
-## Required Environment Variables
-Backend reads these from `.env` (or from Render environment variables in production):
-- `DB_HOST`
-- `DB_PORT`
-- `DB_NAME`
-- `DB_USER`
-- `DB_PASSWORD`
-- `DB_SSL` (set to `true` for Railway MySQL; recommended)
-- `JWT_SECRET`
-- `OPENAI_API_KEY` (optional for demo; safer fallbacks used if missing)
-- `PORT` (optional; defaults to `5000`)
 
 ## REST API (endpoints)
 - `POST /api/auth/register`
