@@ -1,65 +1,42 @@
-# MindTrack Hackathon MVP (48h)
+# MindTrack Web App (Hackathon MVP)
 
-Mental wellness tracker with:
+Mental wellness tracker that supports:
 - Daily mood/stress/sleep/energy check-ins
-- AI-generated safe daily suggestions
-- Weekly/monthly trend report charts
-- Safe support chatbot with crisis keyword guardrails
+- Safe daily AI suggestions (no diagnosis)
+- Weekly/monthly trend charts + a non-diagnostic risk report card
+- Safe chatbot with crisis-keyword guardrails
+- Appointment request flow (saved to MySQL)
 
 ## Tech Stack
-- Frontend: HTML, Vanilla JS, Tailwind CSS (CDN), Bootstrap
-- Backend: Node.js, Express, REST API
-- Database: MySQL + Sequelize ORM
+- Frontend: plain HTML + Vanilla JS, Tailwind CSS (CDN), Bootstrap
+- Backend: Node.js + Express (REST)
+- Database: MySQL + Sequelize
 - Auth: JWT + bcrypt
-- AI: OpenAI API
+- AI: OpenAI API (optional; app still works with safe fallbacks)
 
-## Setup
-1. Create `.env` from `.env.example`.
-2. Create MySQL DB:
-   - Railway/Railway example DB: `CREATE DATABASE mental_hack;`
-3. Install packages:
+## Local Setup
+1. Install dependencies:
    - `npm install`
-4. Start dev server:
+2. Create environment file:
+   - Copy `.env.example` to `.env` and fill values.
+3. Start server:
    - `npm run dev`
-5. Open:
+4. Open:
    - `http://localhost:5000`
 
-## Deploy (Render + Railway)
-Render will run the Node/Express backend and also serve the frontend from `public/`.
+## Required Environment Variables
+Backend reads these from `.env` (or from Render environment variables in production):
+- `DB_HOST`
+- `DB_PORT`
+- `DB_NAME`
+- `DB_USER`
+- `DB_PASSWORD`
+- `DB_SSL` (set to `true` for Railway MySQL; recommended)
+- `JWT_SECRET`
+- `OPENAI_API_KEY` (optional for demo; safer fallbacks used if missing)
+- `PORT` (optional; defaults to `5000`)
 
-### 1) Railway: MySQL
-1. In Railway, provision MySQL.
-2. Copy these values from Railway (service connection details):
-   - `host`
-   - `port`
-   - `database`
-   - `username`
-   - `password`
-3. Paste them into Render as environment variables (next section).
-
-### 2) Render: Web Service
-1. Create a new Render Web Service from your GitHub repo.
-2. Build command:
-   - `npm install`
-3. Start command:
-   - `npm start`
-4. Environment variables on Render (set these):
-   - `PORT` (optional; Render usually sets it automatically)
-   - `DB_HOST`
-   - `DB_PORT`
-   - `DB_NAME`
-   - `DB_USER`
-   - `DB_PASSWORD`
-   - `JWT_SECRET`
-   - `OPENAI_API_KEY` (optional; without it the app uses safe fallback text)
-   - `DB_SSL=true` (recommended for Railway MySQL)
-
-### 3) After deploy
-1. Open the Render URL.
-2. Register a user and submit check-ins.
-3. View the trends + risk report card and chatbot.
-
-## REST Endpoints
+## REST API (endpoints)
 - `POST /api/auth/register`
 - `POST /api/auth/login`
 - `POST /api/checkins` (auth)
@@ -68,12 +45,27 @@ Render will run the Node/Express backend and also serve the frontend from `publi
 - `POST /api/chat` (auth)
 - `POST /api/bookings/request` (auth)
 
-## 48-hour Delivery Plan
-- Hour 0-8: Auth, DB models, daily check-in form, save API
-- Hour 8-16: Charts + report API + UI polish
-- Hour 16-26: AI insight + safe chatbot + crisis fallback
-- Hour 26-36: Testing, bug fixes, sample data
-- Hour 36-48: Pitch deck, demo script, final cleanup
+## Deploy (Render + Railway)
+### Railway: Provision MySQL
+1. Provision MySQL in Railway.
+2. Copy the MySQL connection details from Railway:
+   - host, port, database, username, password
 
-## Important Safety Note
-This app provides general wellness support and is **not** a medical diagnosis tool.
+### Render: Deploy backend
+1. Create a Render Web Service from your GitHub repo.
+2. Build command:
+   - `npm install`
+3. Start command:
+   - `npm start`
+4. Set Environment Variables on Render:
+   - `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`
+   - `DB_SSL=true` (recommended for Railway)
+   - `JWT_SECRET`
+   - `OPENAI_API_KEY` (optional but recommended)
+   - `NODE_ENV=production` (optional)
+
+### Frontend
+This project serves the frontend from `public/` via Express static hosting, so deploying the backend service is enough.
+
+## Security Note
+Do not push real secrets in Git. Only commit `.env.example`. The `.env` file is ignored by Git.
