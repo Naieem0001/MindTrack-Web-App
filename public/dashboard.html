@@ -132,28 +132,14 @@
   <body class="bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-slate-900 via-indigo-950 to-slate-950 text-white min-h-screen pb-5">
     
     <!-- Navbar (z-index adjusted to 1050 for mobile fixes) -->
-    <nav class="navbar navbar-expand-lg glass-navbar sticky-top px-3 py-3" style="z-index: 1050;">
-      <div class="container-fluid">
-        <a class="navbar-brand text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-indigo-400 d-flex align-items-center gap-2" href="#">
+    <nav class="navbar glass-navbar sticky-top px-3 py-3" style="z-index: 1050;">
+      <div class="container-fluid d-flex justify-content-between align-items-center">
+        <a class="navbar-brand text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-indigo-400 m-0" href="#">
           MindTrack
         </a>
-        <button class="navbar-toggler border-white/20" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/></svg>
+        <button class="btn btn-outline-danger btn-sm rounded-pill px-3 px-md-4 fw-medium border-white/20 hover:bg-white/10" onclick="logout()">
+          Log out
         </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0 mt-3 mt-lg-0 gap-2 ms-lg-4">
-            <li class="nav-item">
-              <!-- Using button logic to trigger visually in Tabs below -->
-              <a class="nav-link text-white/80 hover:text-white" href="#" onclick="document.getElementById('checkin-tab').click()">Daily Check-in</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white/80 hover:text-white" href="#" onclick="document.getElementById('trends-tab').click()">Trends</a>
-            </li>
-          </ul>
-          <button class="btn btn-outline-danger btn-sm rounded-pill px-4 mt-2 mt-lg-0 fw-medium" onclick="logout()">
-            Log out
-          </button>
-        </div>
       </div>
     </nav>
 
