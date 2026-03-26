@@ -1,0 +1,6 @@
+# Local env (contains secrets)
+.env
+
+node_modules
+*.log
+coverage
