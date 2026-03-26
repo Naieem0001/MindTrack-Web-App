@@ -29,8 +29,9 @@ No diagnosis.`;
       max_tokens: 220,
     });
     return response.choices[0].message?.content || fallbackDaily();
-  } catch {
-    return fallbackDaily();
+  } catch (err) {
+    const errorMsg = err?.error?.message || err?.message || "Unknown error";
+    return fallbackDaily() + " (API Error: " + errorMsg + ")";
   }
 };
 
@@ -75,7 +76,8 @@ exports.safeChatReply = async (message) => {
       max_tokens: 220,
     });
     return { reply: response.choices[0].message?.content || fallbackChat, safetyFlag: false };
-  } catch {
-    return { reply: fallbackChat, safetyFlag: false };
+  } catch (err) {
+    const errorMsg = err?.error?.message || err?.message || "Unknown error";
+    return { reply: fallbackChat + "\n\n(API Error Diagnostics: " + errorMsg + ")", safetyFlag: false };
   }
 };
