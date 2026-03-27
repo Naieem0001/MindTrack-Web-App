@@ -1,19 +1,19 @@
-const OpenAI = require("openai");
+const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 function getClient() {
-  const apiKey = process.env.OPENAI_API_KEY;
+  const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) return null;
-  return new OpenAI({ apiKey });
+  return new GoogleGenerativeAI(apiKey);
 }
 
 const fallbackDaily = () =>
   "You seem to be under pressure today. Try 5 minutes of deep breathing, a 10-minute walk, and proper hydration. If stress continues for several days, talk to a trusted person or professional.";
 
 const fallbackChat =
-  "I hear you. I am here for supportive suggestions, not diagnosis. Can you share if your stress is mostly from sleep, workload, relationships, or health routines?";
+  "I hear you. I am here for supportive suggestions, not diagnosis. Feel Free to Ask anything?";
 
 exports.generateDailyInsight = async (payload) => {
-  if (!process.env.OPENAI_API_KEY) return fallbackDaily();
+  if (!process.env.GEMINI_API_KEY) return fallbackDaily();
   const client = getClient();
   try {
     const prompt = `User daily check-in: ${JSON.stringify(payload)}.
@@ -23,14 +23,11 @@ Give a short, safe, non-clinical response in 3-4 lines with:
 3) when to seek professional support.
 No diagnosis.`;
 
-    const response = await client.chat.completions.create({
-      model: "gpt-4o-mini",
-      messages: [{ role: "user", content: prompt }],
-      max_tokens: 220,
-    });
-    return response.choices[0].message?.content || fallbackDaily();
+    const model = client.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const result = await model.generateContent(prompt);
+    return result.response.text() || fallbackDaily();
   } catch (err) {
-    const errorMsg = err?.error?.message || err?.message || "Unknown error";
+    const errorMsg = err?.message || "Unknown error";
     return fallbackDaily() + " (API Error: " + errorMsg + ")";
   }
 };
@@ -63,21 +60,18 @@ exports.safeChatReply = async (message) => {
     };
   }
 
-  if (!process.env.OPENAI_API_KEY) return { reply: fallbackChat, safetyFlag: false };
+  if (!process.env.GEMINI_API_KEY) return { reply: fallbackChat, safetyFlag: false };
   const client = getClient();
 
   try {
-    const response = await client.chat.completions.create({
-      model: "gpt-4o-mini",
-      messages: [
-        { role: "system", content: "You are a mental wellness support bot. Keep answers safe, short, and practical. No diagnosis, no medicine advice." },
-        { role: "user", content: message }
-      ],
-      max_tokens: 220,
+    const model = client.getGenerativeModel({
+      model: "gemini-1.5-flash",
+      systemInstruction: "You are a mental wellness support bot. Keep answers safe, short, and practical. No diagnosis, no medicine advice.",
     });
-    return { reply: response.choices[0].message?.content || fallbackChat, safetyFlag: false };
+    const result = await model.generateContent(message);
+    return { reply: result.response.text() || fallbackChat, safetyFlag: false };
   } catch (err) {
-    const errorMsg = err?.error?.message || err?.message || "Unknown error";
+    const errorMsg = err?.message || "Unknown error";
     return { reply: fallbackChat + "\n\n(API Error Diagnostics: " + errorMsg + ")", safetyFlag: false };
   }
 };

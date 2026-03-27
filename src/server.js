@@ -33,7 +33,16 @@ sequelize
   .sync()
   .then(() => {
     startWeeklyDigestJob();
-    app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+    app.listen(PORT, () => {
+      console.log(`Server running on http://localhost:${PORT}`);
+      // Self-ping to prevent Render from going to sleep
+      const RENDER_URL = process.env.CLIENT_URL || `http://localhost:${PORT}`;
+      setInterval(() => {
+        fetch(`${RENDER_URL}/api/health`)
+          .then(res => console.log(`[Self-Ping] Status: ${res.status}`))
+          .catch(err => console.error(`[Self-Ping] Error:`, err.message));
+      }, 14 * 60 * 1000); // 14 minutes
+    });
   })
   .catch((err) => {
     console.error("DB init failed:", err.message);
