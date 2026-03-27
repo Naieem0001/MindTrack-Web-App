@@ -23,7 +23,7 @@ Give a short, safe, non-clinical response in 3-4 lines with:
 3) when to seek professional support.
 No diagnosis.`;
 
-    const model = client.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = client.getGenerativeModel({ model: "gemini-flash-latest" });
     const result = await model.generateContent(prompt);
     return result.response.text() || fallbackDaily();
   } catch (err) {
@@ -65,7 +65,7 @@ exports.safeChatReply = async (message) => {
 
   try {
     const model = client.getGenerativeModel({
-      model: "gemini-1.5-flash",
+      model: "gemini-flash-latest",
       systemInstruction: "You are a mental wellness support bot. Keep answers safe, short, and practical. No diagnosis, no medicine advice.",
     });
     const result = await model.generateContent(message);
