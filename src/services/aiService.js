@@ -169,21 +169,17 @@ exports.safeChatReply = async (message) => {
     };
   }
 
-  if (!process.env.GROK_API_KEY) return { reply: "I'm here for you. What's on your mind?", safetyFlag: false };
+  if (!process.env.GROK_API_KEY) return { reply: "I'm here for you. How can I help today?", safetyFlag: false };
 
   try {
     const reply = await groqChat([
       {
         role: "system",
         content:
-          "You are MindTrack AI — a warm, empathetic mental wellness companion. " +
-          "Listen actively, validate feelings, offer practical self-care suggestions. " +
-          "Never diagnose. Never suggest medication. Never claim to be a therapist. " +
-          "Keep responses 3-5 sentences. Be supportive and gentle. " +
-          "Suggest: breathing exercises, journaling, walks, hydration, sleep hygiene, gratitude.",
+          "You are a caring friend and supportive counselor. Respond in a warm, empathetic tone, keeping replies brief (2-3 sentences). Offer gentle advice, ask follow‑up questions, and never give medical diagnoses."
       },
       { role: "user", content: message },
-    ]);
+    ], 200);
 
     return { reply: reply || "I hear you. Would you like to talk more about it?", safetyFlag: false };
   } catch (err) {

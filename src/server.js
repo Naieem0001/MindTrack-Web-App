@@ -1,4 +1,4 @@
-require("dotenv").config();
+require("dotenv").config({ quiet: true });
 const express = require("express");
 const path = require("path");
 const cors = require("cors");
@@ -11,6 +11,16 @@ const reportRoutes = require("./routes/reportRoutes");
 const chatRoutes = require("./routes/chatRoutes");
 const bookingRoutes = require("./routes/bookingRoutes");
 const { startWeeklyDigestJob } = require("./jobs/weeklyDigestJob");
+
+// ── Graceful unhandled rejection/exception handling ──────────────────────
+process.on("unhandledRejection", (reason) => {
+  console.error("[Server] Unhandled promise rejection:", reason?.message || reason);
+  // Don't exit — log only, so nodemon doesn't crash
+});
+process.on("uncaughtException", (err) => {
+  console.error("[Server] Uncaught exception:", err.message);
+  // Only exit for truly fatal errors
+});
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -34,14 +44,17 @@ sequelize
   .then(() => {
     startWeeklyDigestJob();
     app.listen(PORT, () => {
-      console.log(`Server running on http://localhost:${PORT}`);
-      // Self-ping to prevent Render from going to sleep
-      const RENDER_URL = process.env.CLIENT_URL || `http://localhost:${PORT}`;
-      setInterval(() => {
-        fetch(`${RENDER_URL}/api/health`)
-          .then(res => console.log(`[Self-Ping] Status: ${res.status}`))
-          .catch(err => console.error(`[Self-Ping] Error:`, err.message));
-      }, 1 * 60 * 1000); // 1 minute
+      console.log(`✅ Server running on http://localhost:${PORT}`);
+      // Self-ping only in production to prevent Render sleep
+      const RENDER_URL = process.env.CLIENT_URL;
+      const isProduction = RENDER_URL && !RENDER_URL.includes('localhost');
+      if (isProduction) {
+        setInterval(() => {
+          fetch(`${RENDER_URL}/api/health`)
+            .then(res => console.log(`[Self-Ping] Status: ${res.status}`))
+            .catch(err => console.error(`[Self-Ping] Error:`, err.message));
+        }, 1 * 60 * 1000); // 1 minute
+      }
     });
   })
   .catch((err) => {
