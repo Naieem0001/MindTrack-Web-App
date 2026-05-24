@@ -553,7 +553,10 @@ select.btn-ghost option, select.btn-sm option { background: var(--card-bg); colo
 .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 199; backdrop-filter: blur(2px); }
 .sidebar-toggle { display: none; }
 
-@media (max-width: 1024px) { .stats-row { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 1024px) {
+  .stats-row { grid-template-columns: repeat(2, 1fr); }
+}
+
 @media (max-width: 900px) {
   .sidebar { transform: translateX(-100%); }
   .sidebar.open { transform: translateX(0); }
@@ -566,9 +569,35 @@ select.btn-ghost option, select.btn-sm option { background: var(--card-bg); colo
   .checkin-grid { grid-template-columns: 1fr; }
   .checkin-grid .full { grid-column: 1; }
 }
+
 @media (max-width: 600px) {
   .stats-row { grid-template-columns: 1fr 1fr; }
   h1 { font-size: 1.5rem; }
+  .card-pad { padding: 16px; }
+  .card-header { padding: 14px 16px; }
+  .hero-section { padding: 80px 16px 40px; }
+  .hero-title { font-size: 1.8rem; }
+  .hero-sub { font-size: 0.9rem; margin-bottom: 20px; }
+  .hero-cards { margin-top: 24px; gap: 8px; }
+  .mini-stat { padding: 10px 12px; min-width: 100px; }
+  .mini-stat-val { font-size: 1.1rem; }
+  .landing-nav { padding: 0 16px; }
+}
+
+@media (max-width: 500px) {
+  #topDate { display: none !important; }
+  .topbar-left .page-title { font-size: 0.9rem; }
+  .stats-row { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .stat-card { padding: 12px 14px; }
+  .stat-value { font-size: 1.25rem; }
+  .stat-label { font-size: 0.65rem; }
+  .card-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+}
+
+@media (max-width: 450px) {
+  .landing-nav .brand-name { display: none !important; }
+  .landing-nav .btn-primary { display: none !important; }
+  .landing-nav .btn-ghost { padding: 6px 12px; font-size: 0.8rem; }
 }
 
 /* ── AUTH MODAL ── */
