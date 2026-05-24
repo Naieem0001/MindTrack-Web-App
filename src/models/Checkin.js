@@ -9,6 +9,8 @@ const Checkin = sequelize.define("Checkin", {
   anxietyScore: { type: DataTypes.INTEGER, allowNull: false },
   sleepScore: { type: DataTypes.INTEGER, allowNull: false },
   energyScore: { type: DataTypes.INTEGER, allowNull: false },
+  socialScore: { type: DataTypes.INTEGER, allowNull: true, defaultValue: 3 },
+  focusScore: { type: DataTypes.INTEGER, allowNull: true, defaultValue: 3 },
   physicalSymptoms: {
     type: DataTypes.JSON,
     allowNull: false,

@@ -9,6 +9,7 @@ const BookingRequest = sequelize.define("BookingRequest", {
     defaultValue: "Counsellor",
   },
   location: { type: DataTypes.STRING, allowNull: false },
+  phone: { type: DataTypes.STRING, allowNull: false },
   preferredTime: { type: DataTypes.STRING, allowNull: true },
   message: { type: DataTypes.TEXT, allowNull: true },
   status: { type: DataTypes.STRING, allowNull: false, defaultValue: "requested" },

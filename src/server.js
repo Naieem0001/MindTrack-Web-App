@@ -30,7 +30,7 @@ app.use(express.static(path.join(__dirname, "..", "public")));
 app.get("/api/health", (_, res) => res.json({ status: "ok" }));
 
 sequelize
-  .sync()
+  .sync({ alter: true })
   .then(() => {
     startWeeklyDigestJob();
     app.listen(PORT, () => {

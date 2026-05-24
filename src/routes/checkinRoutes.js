@@ -13,6 +13,8 @@ const checkinSchema = Joi.object({
   anxietyScore: Joi.number().integer().min(1).max(5).required(),
   sleepScore: Joi.number().integer().min(1).max(5).required(),
   energyScore: Joi.number().integer().min(1).max(5).required(),
+  socialScore: Joi.number().integer().min(1).max(5).optional().default(3),
+  focusScore: Joi.number().integer().min(1).max(5).optional().default(3),
   physicalSymptoms: Joi.array().items(Joi.string()).default([]),
   notes: Joi.string().allow("").optional(),
 });
