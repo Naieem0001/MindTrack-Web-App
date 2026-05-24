@@ -1,0 +1,92 @@
+/* cinematic-hero.css - Solar System Edition */
+:root {
+  --ch-bg: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  --ch-star-op: 0;
+  --ch-moon-color: #94a3b8; /* Gentle slate crescent for light mode */
+  --ch-moon-glow: rgba(148, 163, 184, 0.4);
+  --ch-orbit-border: rgba(0, 0, 0, 0.04);
+  --ch-planet-1: #94a3b8;
+  --ch-planet-2: #cbd5e1;
+  --ch-planet-3: #cbd5e1;
+}
+
+[data-theme="dark"] {
+  --ch-bg: linear-gradient(135deg, #0b0f19 0%, #1a1b41 100%);
+  --ch-star-op: 0.6;
+  --ch-moon-color: #e6e6fa; /* Silver crescent for dark mode */
+  --ch-moon-glow: rgba(230, 230, 250, 0.2);
+  --ch-orbit-border: rgba(255, 255, 255, 0.05);
+  --ch-planet-1: #6366f1;
+  --ch-planet-2: #8b5cf6;
+  --ch-planet-3: #38bdf8;
+}
+
+.scene-container {
+  position: absolute; inset: 0; overflow: hidden;
+  background: var(--ch-bg);
+  z-index: 0; pointer-events: none;
+  transition: background var(--transition);
+  display: flex; justify-content: center; align-items: center;
+}
+
+/* STARS */
+.scene-stars { position: absolute; inset: 0; }
+.star {
+  position: absolute; background: #fff; border-radius: 50%;
+  animation: twinkle var(--duration) ease-in-out infinite alternate;
+  opacity: var(--ch-star-op); transition: opacity var(--transition);
+}
+@keyframes twinkle {
+  0% { opacity: 0; transform: scale(0.8); }
+  100% { opacity: var(--ch-star-op); transform: scale(1.2); }
+}
+
+/* MOON / CRESCENT */
+.scene-moon {
+  position: absolute; top: 15%; right: 15%;
+  width: 100px; height: 100px; border-radius: 50%;
+  background: transparent;
+  box-shadow: inset -24px 16px 0 0 var(--ch-moon-color);
+  filter: drop-shadow(0 0 20px var(--ch-moon-glow));
+  transition: all var(--transition);
+  transform: rotate(-15deg);
+}
+
+/* ORBITS */
+.scene-orbits {
+  position: absolute; width: 100%; height: 100%;
+  display: flex; justify-content: center; align-items: center;
+}
+.orbit {
+  position: absolute; border-radius: 50%;
+  border: 1px solid var(--ch-orbit-border);
+  transition: border-color var(--transition);
+}
+.orbit-1 { width: 450px; height: 450px; animation: spin 40s linear infinite; }
+.orbit-2 { width: 750px; height: 750px; animation: spin 70s linear infinite reverse; }
+.orbit-3 { width: 1100px; height: 1100px; animation: spin 110s linear infinite; }
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* PLANETS */
+.planet {
+  position: absolute; border-radius: 50%;
+  top: 0; left: 50%; transform: translate(-50%, -50%);
+  transition: background var(--transition);
+}
+.orbit-1 .planet { width: 14px; height: 14px; background: var(--ch-planet-1); box-shadow: 0 0 10px var(--ch-planet-1); }
+.orbit-2 .planet { width: 28px; height: 28px; background: var(--ch-planet-2); box-shadow: 0 0 15px var(--ch-planet-2); }
+.orbit-3 .planet { width: 18px; height: 18px; background: var(--ch-planet-3); box-shadow: 0 0 12px var(--ch-planet-3); }
+
+/* VIGNETTE */
+.scene-vignette {
+  position: absolute; inset: 0; z-index: 10;
+  background: radial-gradient(circle at center, transparent 40%, rgba(0,0,0,0.05) 100%);
+  pointer-events: none;
+}
+[data-theme="dark"] .scene-vignette {
+  background: radial-gradient(circle at center, transparent 30%, rgba(0,0,0,0.5) 100%);
+}

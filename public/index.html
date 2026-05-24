@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MindTrack — Track Your Mind. Understand Yourself.</title>
     <meta name="description" content="MindTrack helps you log daily mood, energy, sleep and stress. Get AI-powered wellness insights and beautiful trend charts." />
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/style.css?v=16" />
+    <link rel="stylesheet" href="css/cinematic-hero.css" />
   </head>
   <body class="landing-body">
 
@@ -23,85 +24,114 @@
     </nav>
 
     <!-- HERO -->
-    <section class="hero-section">
-      <div class="hero-bg"></div>
-      <div class="hero-content">
-        <div class="hero-badge">✦ Mental Wellness Tracker</div>
-        <h1 class="hero-title">Track Your Mind.<br><span class="gradient-text">Understand Yourself.</span></h1>
-        <p class="hero-sub">
-          Daily mood check-ins, AI-powered insights, and tools to help you breathe.
-          Your mental wellness journey starts in under 30 seconds.
-        </p>
-        <div class="hero-ctas">
-          <button class="btn btn-primary" onclick="openModal('register')" style="padding:12px 28px;font-size:1rem;">Get Started Free →</button>
-          <button class="btn btn-ghost" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})" style="padding:12px 28px;font-size:1rem;">See How It Works</button>
+    <section class="hero-section calm-hero">
+      <div class="hero-bg calm-bg scene-container">
+        <!-- STARS -->
+        <div class="scene-stars">
+          <div class="star" style="--duration: 3s; top: 10%; left: 20%; width: 2px; height: 2px;"></div>
+          <div class="star" style="--duration: 5s; top: 25%; left: 45%; width: 3px; height: 3px;"></div>
+          <div class="star" style="--duration: 7s; top: 15%; left: 75%; width: 2px; height: 2px;"></div>
+          <div class="star" style="--duration: 4s; top: 5%; left: 85%; width: 2px; height: 2px;"></div>
+          <div class="star" style="--duration: 6s; top: 35%; left: 15%; width: 1px; height: 1px;"></div>
+          <div class="star" style="--duration: 9s; top: 40%; left: 60%; width: 3px; height: 3px;"></div>
+          <div class="star" style="--duration: 11s; top: 20%; left: 90%; width: 2px; height: 2px;"></div>
+          <div class="star" style="--duration: 5.5s; top: 8%; left: 35%; width: 2px; height: 2px;"></div>
+          <div class="star" style="--duration: 8s; top: 45%; left: 80%; width: 1px; height: 1px;"></div>
+          <div class="star" style="--duration: 3.5s; top: 30%; left: 5%; width: 2px; height: 2px;"></div>
+          <div class="star" style="--duration: 4.5s; top: 60%; left: 25%; width: 2px; height: 2px;"></div>
+          <div class="star" style="--duration: 7.5s; top: 75%; left: 85%; width: 3px; height: 3px;"></div>
+          <div class="star" style="--duration: 5s; top: 80%; left: 15%; width: 1px; height: 1px;"></div>
+          <div class="star" style="--duration: 6.5s; top: 90%; left: 50%; width: 2px; height: 2px;"></div>
         </div>
-        <div class="hero-cards">
-          <div class="mini-stat"><div class="mini-stat-label">Today's Mood</div><div class="mini-stat-val">😊 4/5</div></div>
-          <div class="mini-stat"><div class="mini-stat-label">Sleep Quality</div><div class="mini-stat-val">🌙 8h</div></div>
-          <div class="mini-stat"><div class="mini-stat-label">Streak</div><div class="mini-stat-val">🔥 7 Days</div></div>
+
+        <!-- MOON/SUN -->
+        <div class="scene-moon"></div>
+
+        <!-- ORBITS -->
+        <div class="scene-orbits">
+          <div class="orbit orbit-1"><div class="planet"></div></div>
+          <div class="orbit orbit-2"><div class="planet"></div></div>
+          <div class="orbit orbit-3"><div class="planet"></div></div>
+        </div>
+
+        <!-- OVERLAYS -->
+        <div class="scene-vignette"></div>
+      </div>
+      <div class="hero-content calm-content scroll-fade" style="z-index: 20; position: relative;">
+        <div class="hero-badge calm-badge">A Safe Space for Your Mind</div>
+        <h1 class="hero-title calm-title">Breathe.<br>Reflect. <span class="gradient-text calm-gradient">Understand.</span></h1>
+        <p class="hero-sub calm-sub">
+          MindTrack is a gentle companion for your mental wellness. Log your feelings without judgment, find your calm, and let AI guide you towards clarity.
+        </p>
+        <div class="hero-ctas calm-ctas">
+          <button class="btn btn-primary pill-btn" onclick="openModal('register')">Begin Your Journey</button>
+          <button class="btn btn-ghost pill-btn ghost-soft" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">Explore Gently</button>
         </div>
       </div>
     </section>
 
     <!-- FEATURES -->
-    <section class="features-section" id="features">
-      <div class="section-header">
-        <div class="section-eyebrow">Features</div>
-        <h2 class="section-title">Everything you need to feel better</h2>
-        <p class="section-sub">Designed for simplicity. Built for real impact on your daily wellness.</p>
+    <section class="features-section calm-section" id="features">
+      <div class="section-header scroll-fade">
+        <h2 class="section-title calm-title">Gentle Tools for Wellness</h2>
+        <p class="section-sub calm-sub">Everything is designed to avoid overwhelm. Just simple, quiet support.</p>
       </div>
-      <div class="features-grid">
-        <div class="feat-card">
-          <div class="feat-icon-wrap" style="background:var(--accent-light);">📋</div>
-          <h3>Daily Check-ins</h3>
-          <p>Log your mood, energy, sleep & stress in under 30 seconds using intuitive emoji selectors and sliders.</p>
+      <div class="features-grid calm-grid">
+        <div class="feat-card organic-card scroll-fade">
+          <div class="feat-icon-wrap soft-icon" style="background:var(--accent-light);color:var(--accent);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+          </div>
+          <h3>Quiet Check-ins</h3>
+          <p>A few soft taps to log your mood, energy, and stress. No rigid forms, just a moment of reflection.</p>
         </div>
-        <div class="feat-card">
-          <div class="feat-icon-wrap" style="background:rgba(37,99,235,0.1);">🤖</div>
-          <h3>AI Wellness Chat</h3>
-          <p>Talk to an AI companion trained to listen, provide supportive guidance, and detect when you need real help.</p>
+        <div class="feat-card organic-card scroll-fade" style="transition-delay: 0.1s;">
+          <div class="feat-icon-wrap soft-icon" style="background:rgba(37,99,235,0.1);color:#2563eb;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+          </div>
+          <h3>A Listening Ear</h3>
+          <p>Talk to our AI companion when your thoughts are loud. It's trained to listen with empathy and care.</p>
         </div>
-        <div class="feat-card">
-          <div class="feat-icon-wrap" style="background:rgba(8,145,178,0.1);">📈</div>
-          <h3>Trend Insights</h3>
-          <p>Visualize your emotional patterns over days or weeks with beautiful, interactive charts and risk summaries.</p>
+        <div class="feat-card organic-card scroll-fade" style="transition-delay: 0.2s;">
+          <div class="feat-icon-wrap soft-icon" style="background:rgba(8,145,178,0.1);color:#0891b2;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+          </div>
+          <h3>Soft Insights</h3>
+          <p>See your emotional rhythms over time with soothing, non-intrusive visual patterns.</p>
         </div>
       </div>
     </section>
 
     <!-- HOW IT WORKS -->
-    <section class="steps-section" id="how">
-      <div class="section-header">
-        <div class="section-eyebrow">How It Works</div>
-        <h2 class="section-title">Three steps to mental clarity</h2>
-        <p class="section-sub">No complexity. No overwhelm. Just a better way to understand yourself.</p>
+    <section class="steps-section calm-section" id="how">
+      <div class="section-header scroll-fade">
+        <h2 class="section-title calm-title">Three steps to clarity</h2>
+        <p class="section-sub calm-sub">Take it one step at a time. There's no rush here.</p>
       </div>
-      <div class="steps-grid">
-        <div class="step-card">
-          <div class="step-num">1</div>
-          <h3>Create Your Account</h3>
-          <p>Sign up for free in seconds. No credit card. Your data stays private and encrypted.</p>
+      <div class="steps-grid calm-grid">
+        <div class="step-card organic-card scroll-fade">
+          <div class="step-num soft-num">1</div>
+          <h3>Find Your Space</h3>
+          <p>Create a secure, private account where your thoughts stay safely encrypted.</p>
         </div>
-        <div class="step-card">
-          <div class="step-num">2</div>
-          <h3>Log Your Daily Check-in</h3>
-          <p>Spend 30 seconds rating your mood, sleep, stress and energy. Build a consistent habit.</p>
+        <div class="step-card organic-card scroll-fade" style="transition-delay: 0.1s;">
+          <div class="step-num soft-num">2</div>
+          <h3>Pause & Reflect</h3>
+          <p>Take 30 seconds a day to check in with how your mind and body are feeling.</p>
         </div>
-        <div class="step-card">
-          <div class="step-num">3</div>
-          <h3>Get AI-Powered Insights</h3>
-          <p>Review weekly trends, get personalized suggestions, and track your mental wellness progress.</p>
+        <div class="step-card organic-card scroll-fade" style="transition-delay: 0.2s;">
+          <div class="step-num soft-num">3</div>
+          <h3>Gain Perspective</h3>
+          <p>Review soft visual trends and gentle AI insights to understand your mental state.</p>
         </div>
       </div>
     </section>
 
     <!-- CTA -->
-    <section class="cta-section">
-      <div class="cta-box">
-        <h2>Start your wellness journey today</h2>
-        <p>Join people who check in with MindTrack every day to understand themselves better.</p>
-        <button class="btn btn-primary" onclick="openModal('register')" style="padding:12px 28px;font-size:1rem;">Create Free Account →</button>
+    <section class="cta-section calm-section">
+      <div class="cta-box organic-card scroll-fade">
+        <h2 class="calm-title" style="font-size:2rem;">Start your wellness journey</h2>
+        <p class="calm-sub" style="margin-bottom:30px;">Join a peaceful community that checks in with themselves every day.</p>
+        <button class="btn btn-primary pill-btn" onclick="openModal('register')">Create Free Account</button>
       </div>
     </section>
 
@@ -189,6 +219,19 @@
       document.addEventListener('keydown', e => {
         if (e.key === 'Enter' && document.getElementById('authModal').classList.contains('open')) handleAuth();
         if (e.key === 'Escape') closeModal();
+      });
+
+      // ── Scroll Animations ──
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.1 });
+
+      document.querySelectorAll('.scroll-fade').forEach((el) => {
+        observer.observe(el);
       });
     </script>
   </body>

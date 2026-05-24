@@ -26,14 +26,24 @@
 
         <div class="sidebar-section">
           <div class="sidebar-section-label">Main</div>
-          <button class="nav-item active" onclick="go('checkin',this)" id="nav-checkin"><span class="nav-icon">📋</span>Check-in</button>
-          <button class="nav-item" onclick="go('trends',this)" id="nav-trends"><span class="nav-icon">📈</span>Trends</button>
-          <button class="nav-item" onclick="go('chat',this)" id="nav-chat"><span class="nav-icon">🤖</span>AI Chat</button>
+          <button class="nav-item active" onclick="go('checkin',this)" id="nav-checkin">
+            <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg></span>Check-in
+          </button>
+          <button class="nav-item" onclick="go('trends',this)" id="nav-trends">
+            <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg></span>Trends
+          </button>
+          <button class="nav-item" onclick="go('chat',this)" id="nav-chat">
+            <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></span>AI Chat
+          </button>
         </div>
         <div class="sidebar-section">
           <div class="sidebar-section-label">Tools</div>
-          <button class="nav-item" onclick="go('appointments',this)" id="nav-appointments"><span class="nav-icon">📅</span>Appointments</button>
-          <button class="nav-item" onclick="go('breathe',this)" id="nav-breathe"><span class="nav-icon">🌬️</span>Breathe</button>
+          <button class="nav-item" onclick="go('appointments',this)" id="nav-appointments">
+            <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span>Appointments
+          </button>
+          <button class="nav-item" onclick="go('breathe',this)" id="nav-breathe">
+            <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"></path><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg></span>Breathe
+          </button>
         </div>
 
         <div class="sidebar-footer">
@@ -81,26 +91,22 @@
 
             <!-- Stats Row -->
             <div class="stats-row">
-              <div class="stat-card" style="--stat-color:linear-gradient(90deg,#7c3aed,#a78bfa);">
-                <div class="stat-icon">😊</div>
+              <div class="stat-card">
                 <div class="stat-label">Today's Mood</div>
                 <div class="stat-value" id="stMood">—</div>
                 <div class="stat-sub">out of 5</div>
               </div>
-              <div class="stat-card" style="--stat-color:linear-gradient(90deg,#2563eb,#60a5fa);">
-                <div class="stat-icon">📊</div>
+              <div class="stat-card">
                 <div class="stat-label">Weekly Avg</div>
                 <div class="stat-value" id="stAvg">—</div>
                 <div class="stat-sub">last 7 days</div>
               </div>
-              <div class="stat-card" style="--stat-color:linear-gradient(90deg,#059669,#34d399);">
-                <div class="stat-icon">🔥</div>
+              <div class="stat-card">
                 <div class="stat-label">Streak</div>
                 <div class="stat-value" id="stStreak">—</div>
                 <div class="stat-sub">consecutive days</div>
               </div>
-              <div class="stat-card" style="--stat-color:linear-gradient(90deg,#0891b2,#67e8f9);">
-                <div class="stat-icon">🌙</div>
+              <div class="stat-card">
                 <div class="stat-label">Avg Sleep</div>
                 <div class="stat-value" id="stSleep">—</div>
                 <div class="stat-sub">this week</div>
@@ -238,26 +244,22 @@
 
             <!-- Average Summary Cards -->
             <div class="stats-row" style="margin-bottom:18px;">
-              <div class="stat-card" style="--stat-color:linear-gradient(90deg,#7c3aed,#a78bfa);">
-                <div class="stat-icon">😊</div>
+              <div class="stat-card">
                 <div class="stat-label">Avg Mood</div>
                 <div class="stat-value" id="tAvgMood">—</div>
                 <div class="stat-sub">1 = very low, 5 = great</div>
               </div>
-              <div class="stat-card" style="--stat-color:linear-gradient(90deg,#dc2626,#f87171);">
-                <div class="stat-icon">😣</div>
+              <div class="stat-card">
                 <div class="stat-label">Avg Stress</div>
                 <div class="stat-value" id="tAvgStress">—</div>
                 <div class="stat-sub">1 = calm, 5 = very stressed</div>
               </div>
-              <div class="stat-card" style="--stat-color:linear-gradient(90deg,#2563eb,#60a5fa);">
-                <div class="stat-icon">🌙</div>
+              <div class="stat-card">
                 <div class="stat-label">Avg Sleep</div>
                 <div class="stat-value" id="tAvgSleep">—</div>
                 <div class="stat-sub">1 = terrible, 5 = excellent</div>
               </div>
-              <div class="stat-card" style="--stat-color:linear-gradient(90deg,#d97706,#fbbf24);">
-                <div class="stat-icon">⚡</div>
+              <div class="stat-card">
                 <div class="stat-label">Avg Energy</div>
                 <div class="stat-value" id="tAvgEnergy">—</div>
                 <div class="stat-sub">1 = exhausted, 5 = pumped</div>
@@ -540,12 +542,12 @@
 
       // ── HABITS ──
       const HABITS = [
-        { id: 'water', label: 'Drank 8 glasses', icon: '💧' },
-        { id: 'exercise', label: 'Walked or exercised', icon: '🏃' },
-        { id: 'meal', label: 'Ate a proper meal', icon: '🍽️' },
-        { id: 'screen', label: 'Took a screen break', icon: '📵' },
-        { id: 'gratitude', label: 'Practiced gratitude', icon: '🙏' },
-        { id: 'rest', label: 'Got enough sleep', icon: '🌙' },
+        { id: 'water', label: 'Drank 8 glasses' },
+        { id: 'exercise', label: 'Walked or exercised' },
+        { id: 'meal', label: 'Ate a proper meal' },
+        { id: 'screen', label: 'Took a screen break' },
+        { id: 'gratitude', label: 'Practiced gratitude' },
+        { id: 'rest', label: 'Got enough sleep' },
       ];
       function initHabits() {
         const today = new Date().toISOString().slice(0, 10);
@@ -556,7 +558,7 @@
           const done = !!data[h.id];
           const el = document.createElement('button');
           el.className = 'habit-chip' + (done ? ' done' : '');
-          el.innerHTML = `<span class="chip-check">${done ? '✓' : ''}</span>${h.icon} ${h.label}`;
+          el.innerHTML = `<span class="chip-check">${done ? '✓' : ''}</span>${h.label}`;
           el.onclick = () => { data[h.id] = !data[h.id]; localStorage.setItem('hab_' + today, JSON.stringify(data)); initHabits(); };
           list.appendChild(el);
         });

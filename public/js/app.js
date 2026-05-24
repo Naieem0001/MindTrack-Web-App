@@ -131,7 +131,10 @@ async function submitCheckin() {
     socialScore:  Number(socialVal) || 3,
     focusScore:   Number(focusVal) || 3,
     physicalSymptoms: symptomsRaw ? symptomsRaw.split(',').map(s => s.trim()).filter(Boolean) : [],
-    date:   document.getElementById('checkinDate')?.value || undefined,
+    date:   document.getElementById('checkinDate')?.value || (function() {
+      const d = new Date();
+      return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+    })(),
   };
 
   showMsg('checkinMsg', 'Saving your check-in...', 'info');

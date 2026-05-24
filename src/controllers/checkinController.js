@@ -7,17 +7,14 @@ exports.createCheckin = async (req, res) => {
     const date = req.body.date || new Date().toISOString().slice(0, 10);
     const data = { ...req.body, userId, date };
 
-    // Upsert: update existing record for today, or insert a new one
+    // Check if user already checked in today
     const existing = await Checkin.findOne({ where: { userId, date } });
-    let checkin;
     if (existing) {
-      const insight = await generateDailyInsight(data);
-      await existing.update({ ...data, dailyInsight: insight });
-      checkin = existing;
-    } else {
-      const insight = await generateDailyInsight(data);
-      checkin = await Checkin.create({ ...data, dailyInsight: insight });
+      return res.status(400).json({ message: "You have already checked in today. Please come back tomorrow!" });
     }
+
+    const insight = await generateDailyInsight(data);
+    const checkin = await Checkin.create({ ...data, dailyInsight: insight });
 
     return res.status(201).json({ checkin });
   } catch (err) {

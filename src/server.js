@@ -1,6 +1,7 @@
 require("dotenv").config({ quiet: true });
 const express = require("express");
 const path = require("path");
+const https = require("https");
 const cors = require("cors");
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
@@ -45,16 +46,16 @@ sequelize
     startWeeklyDigestJob();
     app.listen(PORT, () => {
       console.log(`✅ Server running on http://localhost:${PORT}`);
-      // Self-ping only in production to prevent Render sleep
-      const RENDER_URL = process.env.CLIENT_URL;
-      const isProduction = RENDER_URL && !RENDER_URL.includes('localhost');
-      if (isProduction) {
-        setInterval(() => {
-          fetch(`${RENDER_URL}/api/health`)
-            .then(res => console.log(`[Self-Ping] Status: ${res.status}`))
-            .catch(err => console.error(`[Self-Ping] Error:`, err.message));
-        }, 1 * 60 * 1000); // 1 minute
-      }
+      const keepAlive = () => {
+        https.get(process.env.RENDER_EXTERNAL_URL || 'https://your-app.onrender.com', (res) => {
+          console.log(`Keep-alive ping: ${res.statusCode}`);
+        }).on('error', (e) => {
+          console.error('Ping failed:', e.message);
+        });
+      };
+
+      // Ping every 10 minutes
+      setInterval(keepAlive, 10 * 60 * 1000);
     });
   })
   .catch((err) => {
