@@ -52,6 +52,15 @@
   transform: rotate(-15deg);
 }
 
+@media (max-width: 768px) {
+  .scene-moon {
+    width: 60px; height: 60px;
+    top: 75px; right: 5%;
+    box-shadow: inset -15px 10px 0 0 var(--ch-moon-color);
+    filter: drop-shadow(0 0 10px var(--ch-moon-glow));
+  }
+}
+
 /* ORBITS */
 .scene-orbits {
   position: absolute; width: 100%; height: 100%;

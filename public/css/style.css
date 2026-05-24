@@ -850,20 +850,26 @@ select.btn-ghost option, select.btn-sm option { background: var(--card-bg); colo
   100% { background-position: 0% 50%; }
 }
 .calm-section {
-  padding: 100px 24px;
-  background: linear-gradient(120deg, var(--bg) 0%, var(--bg-2) 50%, var(--accent-light) 100%);
+  padding: 64px 24px;
+  background: linear-gradient(120deg, #f8fafc 0%, #e0e7ff 40%, #f3e8ff 100%);
   background-size: 200% 200%;
   animation: calmBreath 20s ease-in-out infinite;
   border-top: 1px solid var(--divider);
 }
 [data-theme="dark"] .calm-section {
-  background: linear-gradient(120deg, var(--bg) 0%, var(--bg-2) 50%, rgba(124, 58, 237, 0.04) 100%);
+  background: linear-gradient(120deg, #0b0f19 0%, #1e1b4b 50%, #0c4a6e 100%);
 }
 .organic-card {
   position: relative; overflow: hidden;
-  border-radius: 32px !important; border: 1px solid var(--divider) !important;
-  background: var(--card-bg); box-shadow: 0 10px 40px rgba(0,0,0,0.02) !important;
+  border-radius: 32px !important; border: 1px solid var(--accent-light) !important;
+  background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(10px);
+  box-shadow: 0 10px 40px rgba(37, 99, 235, 0.05) !important;
   padding: 40px 32px; transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+[data-theme="dark"] .organic-card {
+  background: rgba(15, 23, 42, 0.6);
+  border-color: rgba(124, 58, 237, 0.2) !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4) !important;
 }
 .organic-card::before {
   content: ''; position: absolute; inset: 0;
@@ -909,8 +915,6 @@ select.btn-ghost option, select.btn-sm option { background: var(--card-bg); colo
   background: var(--accent-light); color: var(--accent); border-color: var(--accent-mid);
   transform: scale(1.15) translateY(-2px); box-shadow: 0 10px 25px var(--accent-mid);
 }
-
-[data-theme="dark"] .organic-card { box-shadow: 0 10px 40px rgba(0,0,0,0.2) !important; }
 
 /* Scroll Fade Animations */
 .scroll-fade {
