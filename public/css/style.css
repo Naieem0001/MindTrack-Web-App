@@ -595,9 +595,9 @@ select.btn-ghost option, select.btn-sm option { background: var(--card-bg); colo
 }
 
 @media (max-width: 450px) {
-  .landing-nav .brand-name { display: none !important; }
+  .landing-nav { padding: 0 8px; }
   .landing-nav .btn-primary { display: none !important; }
-  .landing-nav .btn-ghost { padding: 6px 12px; font-size: 0.8rem; }
+  .landing-nav .btn-ghost { padding: 6px 10px; font-size: 0.8rem; }
 }
 
 /* ── AUTH MODAL ── */
