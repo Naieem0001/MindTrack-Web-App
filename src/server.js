@@ -26,7 +26,12 @@ process.on("uncaughtException", (err) => {
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(helmet({ contentSecurityPolicy: false }));
+app.use(helmet({ 
+  contentSecurityPolicy: false,
+  crossOriginOpenerPolicy: { policy: "same-origin-allow-popups" },
+  crossOriginEmbedderPolicy: false,
+  referrerPolicy: { policy: "strict-origin-when-cross-origin" }
+}));
 app.use(cors({ origin: true }));
 app.use(express.json({ limit: "1mb" }));
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 250 }));

@@ -1,6 +1,10 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { User } = require("../models");
+const { OAuth2Client } = require("google-auth-library");
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
 
 const signToken = (user) =>
   jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, {
@@ -40,5 +44,33 @@ exports.login = async (req, res) => {
   } catch (error) {
     console.error("Login error:", error);
     return res.status(500).json({ message: "Login failed" });
+  }
+};
+
+exports.googleLogin = async (req, res) => {
+  try {
+    const { credential } = req.body;
+    if (!credential) return res.status(400).json({ message: "No credential provided" });
+
+    const ticket = await client.verifyIdToken({
+      idToken: credential,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+    const payload = ticket.getPayload();
+    const { email, name } = payload;
+
+    let user = await User.findOne({ where: { email } });
+    if (!user) {
+      user = await User.create({ name, email, passwordHash: null });
+    }
+
+    const token = signToken(user);
+    return res.json({
+      token,
+      user: { id: user.id, name: user.name, email: user.email },
+    });
+  } catch (error) {
+    console.error("Google Login error:", error);
+    return res.status(500).json({ message: "Google Login failed" });
   }
 };

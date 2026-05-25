@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MindTrack — Track Your Mind. Understand Yourself.</title>
     <meta name="description" content="MindTrack helps you log daily mood, energy, sleep and stress. Get AI-powered wellness insights and beautiful trend charts." />
-    <link rel="stylesheet" href="css/style.css?v=18" />
+    <link rel="stylesheet" href="css/style.css?v=20" />
     <link rel="stylesheet" href="css/cinematic-hero.css" />
+    <script src="https://accounts.google.com/gsi/client" onload="initGoogle()" async defer></script>
   </head>
   <body class="landing-body">
 
@@ -175,6 +176,14 @@
           </div>
 
           <button class="btn btn-primary btn-full" id="submitBtn" onclick="handleAuth()">Sign In</button>
+          
+          <div style="display: flex; align-items: center; margin: 20px 0;">
+            <hr style="flex-grow: 1; border: none; border-top: 1px solid var(--divider);">
+            <span style="padding: 0 10px; color: var(--text-4); font-size: 0.8rem;">OR</span>
+            <hr style="flex-grow: 1; border: none; border-top: 1px solid var(--divider);">
+          </div>
+          <div id="googleSignInDiv" style="display: flex; justify-content: center; margin-bottom: 12px;"></div>
+
           <div class="msg" id="authMsg"></div>
         </div>
       </div>
@@ -184,6 +193,20 @@
     <script>
       // Redirect if already logged in
       if (localStorage.getItem('token')) window.location.href = 'dashboard.html';
+
+      // ── Google Sign In ──
+      function initGoogle() {
+        if (window.google) {
+          google.accounts.id.initialize({
+            client_id: "841852794819-tbud5cv01ogsfnqi1c22a6n33oobv0j8.apps.googleusercontent.com",
+            callback: handleGoogleAuth
+          });
+          google.accounts.id.renderButton(
+            document.getElementById("googleSignInDiv"),
+            { theme: getTheme() === 'dark' ? "filled_black" : "outline", size: "large", type: "standard", shape: "rectangular", text: "continue_with", width: 280 }
+          );
+        }
+      }
 
       // ── Theme ──
       function getTheme() { return localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light'); }

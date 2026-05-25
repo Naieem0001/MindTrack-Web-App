@@ -120,6 +120,25 @@ async function login() {
   }
 }
 
+// ─── AUTH: GOOGLE ──────────────────────────────────────────────────────────
+async function handleGoogleAuth(response) {
+  showAuthMsg('Authenticating with Google...', 'info');
+  const data = await api('/api/auth/google', 'POST', { credential: response.credential });
+
+  if (data.token) {
+    token = data.token;
+    localStorage.setItem('token', token);
+    localStorage.setItem('userName', data.user?.name || '');
+    localStorage.setItem('userEmail', data.user?.email || '');
+    showAuthMsg('Logged in! Redirecting...', 'success');
+    setTimeout(() => { window.location.href = 'dashboard.html'; }, 800);
+  } else {
+    const errors = data.errors || (data.message ? [data.message] : ['Google Login failed.']);
+    const el = document.getElementById('authMsg');
+    if (el) { el.innerHTML = errors.map(e => `• ${e}`).join('<br>'); el.className = 'msg show error'; }
+  }
+}
+
 // ─── CHECK-IN: SUBMIT ─────────────────────────────────────────────────────
 async function submitCheckin() {
   const moodVal    = document.getElementById('mood')?.value;
