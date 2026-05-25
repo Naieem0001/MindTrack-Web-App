@@ -1,8 +1,4 @@
-/**
- * Email Service — uses Resend (free: 100 emails/day)
- * Only needs 2 env vars: RESEND_API_KEY + ADMIN_EMAIL
- * Sign up at https://resend.com → get API key → done.
- */
+
 
 exports.sendAppointmentNotification = async ({ booking, userName, userEmail }) => {
   const apiKey = process.env.RESEND_API_KEY;

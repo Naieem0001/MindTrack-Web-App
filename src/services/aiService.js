@@ -130,11 +130,11 @@ ${recent || 'No recent entries'}
 TREND DIRECTION: ${trendDirection}
 RISK LEVEL: ${risk?.level || 'N/A'} (score: ${risk?.riskScore?.toFixed(2) || 'N/A'})
 
-Give me a detailed analysis in this format:
+Give me a detailed analysis in this format with a good looking typography and font style/text style and format like using bullet points, emojis, and clear sections:
 📊 OVERVIEW: [2-3 sentences summarizing overall state honestly — mention specific numbers]
 📈 TRENDS: [What's improving vs declining — be specific with data]
 ⚠️ CONCERNS: [Any areas needing attention — be honest, reference actual scores]
-✅ STRENGTHS: [What's going well — acknowledge positive areas]
+✅ STRENGTHS: [What's going well — acknowledge positive areas in a poetical way ]
 💡 ACTION PLAN: [3-4 specific, actionable steps based on the data — not generic advice]
 🔮 OUTLOOK: [1 sentence — what to focus on next based on trends]`
       },
@@ -161,22 +161,22 @@ exports.safeChatReply = async (message) => {
     return {
       reply:
         "I'm really sorry you're feeling this way. Please reach out for help right away:\n\n" +
-        "🆘 Tele MANAS: 14416 (toll-free)\n" +
+        "🆘 Tele MANAS: 14416 (toll-free) Naieem Qureshi: naieemq111@gmail.com(gmail)\n" +
         "📞 iCall: 9152987821\n" +
         "📞 Vandrevala Foundation: 1860-2662-345\n\n" +
-        "You are not alone, and things can get better with the right support. 💙",
+        "You are not alone, and things can get better with the right support, what you need is love 💙",
       safetyFlag: true,
     };
   }
 
-  if (!process.env.GROK_API_KEY) return { reply: "I'm here for you. How can I help today?", safetyFlag: false };
+  if (!process.env.GROK_API_KEY) return { reply: "Hello, Lay your burdens here, Speak and let me walk beside your thoughts?", safetyFlag: false };
 
   try {
     const reply = await groqChat([
       {
         role: "system",
         content:
-          "You are a caring friend and supportive counselor. Respond in a warm, empathetic tone, keeping replies brief (2-3 sentences). Offer gentle advice, ask follow‑up questions, and never give medical diagnoses."
+          "You are a caring friend and supportive counselor. Respond in a warm, empathetic tone, keeping replies brief (1-2 sentences or more when needed ). Offer gentle advice, ask follow‑up questions but not too unnecessary and too much, and never give medical diagnoses which you think only doctor can give."
       },
       { role: "user", content: message },
     ], 200);
@@ -184,7 +184,7 @@ exports.safeChatReply = async (message) => {
     return { reply: reply || "I hear you. Would you like to talk more about it?", safetyFlag: false };
   } catch (err) {
     console.error("[AI] Chat error:", err.message);
-    return { reply: "I'm here to listen. Could you tell me more about how you're feeling?", safetyFlag: false };
+    return { reply: "I'm here to listen, speak freely and let be stand by your side. Could you tell me more about how is your world going?", safetyFlag: false };
   }
 };
 

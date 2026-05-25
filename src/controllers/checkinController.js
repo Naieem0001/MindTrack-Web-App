@@ -10,7 +10,7 @@ exports.createCheckin = async (req, res) => {
     // Check if user already checked in today
     const existing = await Checkin.findOne({ where: { userId, date } });
     if (existing) {
-      return res.status(400).json({ message: "You have already checked in today. Please come back tomorrow!" });
+      return res.status(400).json({ message: "Already checked in today. Please come back tomorrow with a smile 😊!" });
     }
 
     const insight = await generateDailyInsight(data);

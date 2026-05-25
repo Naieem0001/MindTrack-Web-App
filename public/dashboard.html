@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MindTrack — Dashboard</title>
     <meta name="description" content="Your personal mental wellness dashboard." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="css/style.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
@@ -90,23 +92,27 @@
           <div class="view active" id="view-checkin">
 
             <!-- Stats Row -->
-            <div class="stats-row">
+            <div class="stats-row dash-reveal">
               <div class="stat-card">
+                <div class="stat-icon">😊</div>
                 <div class="stat-label">Today's Mood</div>
                 <div class="stat-value" id="stMood">—</div>
                 <div class="stat-sub">out of 5</div>
               </div>
               <div class="stat-card">
+                <div class="stat-icon">📊</div>
                 <div class="stat-label">Weekly Avg</div>
                 <div class="stat-value" id="stAvg">—</div>
                 <div class="stat-sub">last 7 days</div>
               </div>
               <div class="stat-card">
+                <div class="stat-icon">🔥</div>
                 <div class="stat-label">Streak</div>
                 <div class="stat-value" id="stStreak">—</div>
                 <div class="stat-sub">consecutive days</div>
               </div>
               <div class="stat-card">
+                <div class="stat-icon">💤</div>
                 <div class="stat-label">Avg Sleep</div>
                 <div class="stat-value" id="stSleep">—</div>
                 <div class="stat-sub">this week</div>
@@ -114,7 +120,7 @@
             </div>
 
             <!-- Habits -->
-            <div class="card section-gap">
+            <div class="card section-gap dash-reveal">
               <div class="card-pad">
                 <div class="flex-between">
                   <div class="card-title">Daily Self-Care Habits</div>
@@ -127,7 +133,7 @@
             </div>
 
             <!-- Check-in Form -->
-            <div class="card">
+            <div class="card dash-reveal">
               <div class="card-header"><div class="card-title">📋 Daily Check-in</div><div class="card-sub">7 dimensions of your wellness</div></div>
               <div class="card-pad">
 
@@ -243,23 +249,27 @@
           <div class="view" id="view-trends">
 
             <!-- Average Summary Cards -->
-            <div class="stats-row" style="margin-bottom:18px;">
+            <div class="stats-row dash-reveal" style="margin-bottom:18px;">
               <div class="stat-card">
+                <div class="stat-icon">💜</div>
                 <div class="stat-label">Avg Mood</div>
                 <div class="stat-value" id="tAvgMood">—</div>
                 <div class="stat-sub">1 = very low, 5 = great</div>
               </div>
               <div class="stat-card">
+                <div class="stat-icon">😤</div>
                 <div class="stat-label">Avg Stress</div>
                 <div class="stat-value" id="tAvgStress">—</div>
                 <div class="stat-sub">1 = calm, 5 = very stressed</div>
               </div>
               <div class="stat-card">
+                <div class="stat-icon">🌙</div>
                 <div class="stat-label">Avg Sleep</div>
                 <div class="stat-value" id="tAvgSleep">—</div>
                 <div class="stat-sub">1 = terrible, 5 = excellent</div>
               </div>
               <div class="stat-card">
+                <div class="stat-icon">⚡</div>
                 <div class="stat-label">Avg Energy</div>
                 <div class="stat-value" id="tAvgEnergy">—</div>
                 <div class="stat-sub">1 = exhausted, 5 = pumped</div>
@@ -267,7 +277,7 @@
             </div>
 
             <!-- Chart -->
-            <div class="card" style="margin-bottom:18px;">
+            <div class="card dash-reveal" style="margin-bottom:18px;">
               <div class="card-header">
                 <div>
                   <div class="card-title mb-0">📈 Mood, Sleep & Stress Over Time</div>
@@ -289,7 +299,7 @@
             </div>
 
             <!-- AI Analysis -->
-            <div class="card" style="margin-bottom:18px;">
+            <div class="card dash-reveal" style="margin-bottom:18px;">
               <div class="card-header">
                 <div class="card-title">💡 AI-Powered Analysis</div>
                 <span style="font-size:0.68rem;color:var(--text-4);background:var(--bg-3);padding:3px 8px;border-radius:var(--radius-full);">Powered by AI</span>
@@ -309,7 +319,7 @@
 
 
             <!-- Risk Assessment -->
-            <div class="card" style="margin-bottom:18px;">
+            <div class="card dash-reveal" style="margin-bottom:18px;">
               <div class="card-header">
                 <div>
                   <div class="card-title">🛡️ Wellness Risk Summary</div>
@@ -341,7 +351,7 @@
 
           <!-- ═══ CHAT VIEW ═══ -->
           <div class="view" id="view-chat">
-            <div class="card">
+            <div class="card dash-reveal">
               <div class="card-header"><div class="card-title">🤖 AI Companion</div></div>
               <div class="card-pad">
                 <div class="chat-shell">
@@ -361,7 +371,7 @@
 
           <!-- ═══ APPOINTMENTS VIEW ═══ -->
           <div class="view" id="view-appointments">
-            <div class="grid-2">
+            <div class="grid-2 dash-reveal">
               <div class="card">
                 <div class="card-header"><div class="card-title">📅 Request Appointment</div></div>
                 <div class="card-pad">
@@ -401,7 +411,7 @@
 
           <!-- ═══ BREATHE VIEW ═══ -->
           <div class="view" id="view-breathe">
-            <div class="card">
+            <div class="card dash-reveal">
               <div class="card-pad">
                 <div class="breathe-center">
                   <h2 style="margin-bottom:4px;">Box Breathing</h2>
@@ -602,6 +612,16 @@
       const isDark = getTheme() === 'dark';
       Chart.defaults.color = isDark ? 'rgba(255,255,255,0.55)' : 'rgba(0,0,0,0.55)';
       Chart.defaults.font.family = "'Inter', sans-serif";
+
+      // ── Dashboard Scroll Reveal ──
+      const dashObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+      document.querySelectorAll('.dash-reveal').forEach(el => dashObserver.observe(el));
     </script>
   </body>
 </html>

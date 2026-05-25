@@ -37,6 +37,18 @@ function showMsg(id, content, type) {
   el.className = 'msg show ' + (type || 'error');
 }
 
+// ─── UTILS ────────────────────────────────────────────────────────────────
+function formatMD(text) {
+  if (!text) return '';
+  return String(text)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+    .replace(/\n/g, '<br>');
+}
+
 // Auth-specific message display (landing page)
 function showAuthMsg(msg, type) {
   const el = document.getElementById('authMsg');
@@ -199,7 +211,7 @@ async function loadReport() {
   const taBox = document.getElementById('trendAnalysisBox');
   if (taBox) {
     if (report.trendAnalysis) {
-      taBox.textContent = report.trendAnalysis;
+      taBox.innerHTML = formatMD(report.trendAnalysis);
     } else {
       taBox.textContent = report.totalDays ? 'AI analysis is being generated...' : 'Submit check-ins to see analysis.';
     }
@@ -275,7 +287,7 @@ function addBubble(text, isUser) {
   if (!el) return;
   const d = document.createElement('div');
   d.className = 'bubble ' + (isUser ? 'bubble-user' : 'bubble-ai');
-  d.textContent = text;
+  d.innerHTML = formatMD(text);
   el.appendChild(d);
   el.scrollTop = el.scrollHeight;
 }
