@@ -1,7 +1,6 @@
 MindTrack Web App
 A premium, calm, and interactive mental wellness tracker that supports:
 
-<<<<<<< HEAD
 A premium, calm, and interactive mental wellness tracker that supports:
 - Daily mood, stress, sleep, energy, social connection, and focus check-ins (with 7 tailored fields and instant daily insights).
 - Safe daily AI insights (powered by Groq, with warm support and clean local fallbacks).
@@ -16,7 +15,7 @@ A premium, calm, and interactive mental wellness tracker that supports:
 - **Auth**: JWT + bcryptjs.
 - **AI Integration**: Groq API (Llama models) with robust safety parameters.
 - **Email Notification**: Resend email API.
-=======
+
 Daily mood, stress, sleep, energy, social connection, and focus check-ins (with 7 tailored fields and instant daily insights).
 Safe daily AI insights (powered by Groq, with warm support and clean local fallbacks).
 Interactive, responsive trend charts (Chart.js) with light/dark theme synchronization and a weighted deterministic wellness risk summary.
@@ -114,34 +113,6 @@ This project serves the frontend static assets directly from the `public/` folde
    - `ADMIN_EMAIL`
    - `CLIENT_URL` (matches your Render service web URL)
 
-## Security Note
-Do not push real secrets to Git. Always maintain active secrets in your local `.env` and configure them securely in your production hosting dashboards. Only the `.env.example` template should be committed.
 
-=======
-bash
 
-npm run dev
-The backend will sync database tables (using Sequelize alter: true) and start listening on http://localhost:5000.
 
-Deployment
-Database (Supabase)
-Provision a PostgreSQL database on Supabase.
-Copy the URI pooler connection string and paste it into the DATABASE_URL field in your environment configuration.
-Backend + Frontend (Render)
-This project serves the frontend static assets directly from the public/ folder, meaning deploying a single web service is sufficient:
-
-Create a Web Service on Render.
-Link your GitHub repository.
-Configure the build parameters:
-Build Command: npm install
-Start Command: npm start
-Set the environment variables in your Render service settings dashboard:
-DATABASE_URL
-JWT_SECRET
-GROK_API_KEY
-RESEND_API_KEY
-ADMIN_EMAIL
-CLIENT_URL (matches your Render service web URL)
-Security Note
-Do not push real secrets to Git. Always maintain active secrets in your local .env and configure them securely in your production hosting dashboards. Only the .env.example template should be committed.
->>>>>>> 6f617486de4de74d84abec793b842abe492f0dc7
