@@ -3,7 +3,7 @@ A premium, calm, and interactive mental wellness tracker that supports:
 
 A premium, calm, and interactive mental wellness tracker that supports:
 - Daily mood, stress, sleep, energy, social connection, and focus check-ins (with 7 tailored fields and instant daily insights).
-- Safe daily AI insights (powered by xAI Grok, with warm support and clean local fallbacks).
+- Safe daily AI insights (powered by GroqCloud, with warm support and clean local fallbacks).
 - Interactive, responsive trend charts (Chart.js) with light/dark theme synchronization and a weighted deterministic wellness risk summary.
 - Safe chatbot (MindTrack AI) with crisis-keyword guardrails and Tele MANAS support intercepts.
 - Appointment request flow with automated HTML notifications sent to therapist/admin emails via Resend.
@@ -13,11 +13,11 @@ A premium, calm, and interactive mental wellness tracker that supports:
 - **Backend**: Node.js + Express (REST API).
 - **Database**: PostgreSQL (Supabase) + Sequelize ORM.
 - **Auth**: JWT + bcryptjs.
-- **AI Integration**: xAI Grok API with robust safety parameters.
+- **AI Integration**: GroqCloud API with GPT-OSS models and robust safety parameters.
 - **Email Notification**: Resend email API.
 
 Daily mood, stress, sleep, energy, social connection, and focus check-ins (with 7 tailored fields and instant daily insights).
-Safe daily AI insights (powered by xAI Grok, with warm support and clean local fallbacks).
+Safe daily AI insights (powered by GroqCloud, with warm support and clean local fallbacks).
 Interactive, responsive trend charts (Chart.js) with light/dark theme synchronization and a weighted deterministic wellness risk summary.
 Safe chatbot (MindTrack AI) with crisis-keyword guardrails and Tele MANAS support intercepts.
 Appointment request flow with automated HTML notifications sent to therapist/admin emails via Resend.
@@ -26,7 +26,7 @@ Frontend: Plain HTML + Vanilla JS + custom design system built with premium Vani
 Backend: Node.js + Express (REST API).
 Database: PostgreSQL (Supabase) + Sequelize ORM.
 Auth: JWT + bcryptjs.
-AI Integration: xAI Grok API with robust safety parameters.
+AI Integration: GroqCloud API with GPT-OSS models and robust safety parameters.
 Email Notification: Resend email API.
 REST API Endpoints
 POST /api/auth/register - Create a user account.
@@ -81,8 +81,8 @@ Configure Environment Variables: Create a .env file in the root directory:
    CLIENT_URL=http://localhost:5000
    DATABASE_URL=postgresql://<user>:<password>@<host>:<port>/postgres
    JWT_SECRET=your_jwt_secret_key
-   # xAI Grok API key (not a Groq API key)
-   GROK_API_KEY=your_xai_api_key
+   # GroqCloud API key
+   GROK_API_KEY=your_groq_api_key
    RESEND_API_KEY=your_resend_api_key
    ADMIN_EMAIL=recipient_email@example.com
    ```
@@ -109,9 +109,8 @@ This project serves the frontend static assets directly from the `public/` folde
 4. Set the environment variables in your Render service settings dashboard:
    - `DATABASE_URL`
    - `JWT_SECRET`
-   - `GROK_API_KEY` (xAI Grok API key, not a Groq API key)
+   - `GROK_API_KEY` (GroqCloud API key)
    - `RESEND_API_KEY`
    - `ADMIN_EMAIL`
    - `CLIENT_URL` (matches your Render service web URL)
-
 
