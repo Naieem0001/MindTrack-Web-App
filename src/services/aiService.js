@@ -1,9 +1,8 @@
-const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
+const XAI_API_URL = "https://api.x.ai/v1/chat/completions";
 
-// Try primary model first, fall back if unavailable
-const MODELS = ["llama-3.3-70b-versatile", "llama3-70b-8192", "mixtral-8x7b-32768"];
+const MODELS = ["grok-4.7", "grok-4.6"];
 
-async function groqChat(messages, maxTokens = 600) {
+async function grokChat(messages, maxTokens = 600) {
   const apiKey = process.env.GROK_API_KEY;
   if (!apiKey) {
     console.warn("[AI] GROK_API_KEY is not set in environment");
@@ -15,7 +14,7 @@ async function groqChat(messages, maxTokens = 600) {
   for (const model of MODELS) {
     try {
       console.log(`[AI] Trying model: ${model}`);
-      const res = await fetch(GROQ_API_URL, {
+      const res = await fetch(XAI_API_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -31,10 +30,9 @@ async function groqChat(messages, maxTokens = 600) {
 
       if (!res.ok) {
         const body = await res.text().catch(() => "");
-        console.error(`[AI] Groq ${res.status} with ${model}: ${body.slice(0, 200)}`);
-        lastError = new Error(`Groq ${res.status}: ${body.slice(0, 200)}`);
-        // If 401/403 (auth), no point trying other models
-        if (res.status === 401 || res.status === 403) break;
+        console.error(`[AI] xAI ${res.status} with ${model}: ${body.slice(0, 200)}`);
+        lastError = new Error(`xAI ${res.status}: ${body.slice(0, 200)}`);
+        if ([401, 403, 429].includes(res.status)) break;
         continue;
       }
 
@@ -68,7 +66,7 @@ exports.generateDailyInsight = async (payload) => {
     const energy = labels[payload.energyScore] || payload.energyScore;
     const sleep = labels[payload.sleepScore] || payload.sleepScore;
 
-    const reply = await groqChat([
+    const reply = await grokChat([
       {
         role: "system",
         content: "You are a supportive wellness companion. Give short, practical, non-clinical feedback. Never diagnose. Be warm."
@@ -108,7 +106,7 @@ exports.generateTrendAnalysis = async (reportData) => {
 
     const trendDirection = (series || []).length >= 3 ? detectTrend(series) : "insufficient data";
 
-    const reply = await groqChat([
+    const reply = await grokChat([
       {
         role: "system",
         content: `You are a wellness data analyst in a mood tracking app. Provide honest, detailed analysis of the user's mental wellness trends. Be specific with numbers. Structure your response clearly. Never diagnose medical conditions. Reference actual data points. Be encouraging but truthful.`
@@ -172,7 +170,7 @@ exports.safeChatReply = async (message) => {
   if (!process.env.GROK_API_KEY) return { reply: "Hello, Lay your burdens here, Speak and let me walk beside your thoughts?", safetyFlag: false };
 
   try {
-    const reply = await groqChat([
+    const reply = await grokChat([
       {
         role: "system",
         content:
