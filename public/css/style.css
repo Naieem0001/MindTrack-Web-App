@@ -699,6 +699,46 @@ select.btn-ghost option, select.btn-sm option { background: var(--bg-2); color: 
   box-shadow: 0 6px 24px rgba(124,58,237,0.45), var(--glow-accent);
 }
 
+/* ── ATTACH BUTTON ── */
+.btn-attach {
+  width: 42px; height: 42px; border-radius: var(--radius-lg); flex-shrink: 0;
+  background: var(--bg-3); border: 1.5px solid var(--input-border);
+  color: var(--text-3); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all var(--transition-premium);
+}
+.btn-attach:hover {
+  background: var(--accent-light); border-color: var(--accent-mid); color: var(--accent);
+  transform: scale(1.05);
+}
+
+/* ── FILE PREVIEW CHIP ── */
+.chat-file-preview {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 12px; margin-bottom: 6px;
+  background: var(--bg-3); border: 1px solid var(--divider);
+  border-radius: var(--radius); font-size: 0.82rem; color: var(--text-2);
+  animation: fadeSlideUp 0.2s ease;
+}
+.chat-file-icon { font-size: 1rem; flex-shrink: 0; }
+.chat-file-name {
+  flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  font-weight: 500;
+}
+.chat-file-remove {
+  background: none; border: none; color: var(--text-4); cursor: pointer;
+  font-size: 0.9rem; padding: 2px 6px; border-radius: var(--radius-sm);
+  transition: all 0.15s ease;
+  line-height: 1;
+}
+.chat-file-remove:hover {
+  background: rgba(220,38,38,0.12); color: #dc2626;
+}
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 /* ── APPOINTMENTS ── */
 .appt-item {
   padding: 16px 18px; border-radius: var(--radius-lg);
