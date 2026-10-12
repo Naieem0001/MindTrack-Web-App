@@ -301,8 +301,6 @@ function setRiskUI(risk) {
 }
 
 // ─── CHAT ─────────────────────────────────────────────────────────────────
-let _attachedFile = null; // currently selected file
-
 function addBubble(text, isUser) {
   const el = document.getElementById('chatBody');
   if (!el) return;
@@ -324,85 +322,18 @@ function addTyping() {
   return d;
 }
 
-// ── File attachment helpers ──
-function onFileSelected(input) {
-  const file = input.files?.[0];
-  if (!file) return;
-
-  // 5 MB client-side check
-  if (file.size > 5 * 1024 * 1024) {
-    alert('File too large. Maximum size is 5 MB.');
-    input.value = '';
-    return;
-  }
-
-  _attachedFile = file;
-  const preview = document.getElementById('chatFilePreview');
-  const nameEl = document.getElementById('chatFileName');
-  if (preview && nameEl) {
-    nameEl.textContent = file.name.length > 30 ? file.name.slice(0, 27) + '…' : file.name;
-    preview.style.display = 'flex';
-  }
-}
-
-function removeAttachedFile() {
-  _attachedFile = null;
-  const input = document.getElementById('chatFileInput');
-  if (input) input.value = '';
-  const preview = document.getElementById('chatFilePreview');
-  if (preview) preview.style.display = 'none';
-}
-
 async function sendChat() {
   const inp = document.getElementById('chatIn');
   if (!inp) return;
   const msg = inp.value.trim();
-  if (!msg && !_attachedFile) return;
-  if (!msg) { alert('Please type a message to go with the file.'); return; }
-
+  if (!msg) return;
   checkForCrisis(msg);
-
-  // Show user bubble (with file indicator if attached)
-  const displayMsg = _attachedFile ? `${msg}\n📎 ${_attachedFile.name}` : msg;
-  addBubble(displayMsg, true);
+  addBubble(msg, true);
   inp.value = ''; inp.style.height = 'auto';
-
   const t = addTyping();
-
-  try {
-    // Build FormData — do NOT set Content-Type manually
-    const fd = new FormData();
-    fd.append('message', msg);
-    if (_attachedFile) {
-      fd.append('file', _attachedFile);
-    }
-
-    // Clear attachment after capturing
-    removeAttachedFile();
-
-    const res = await fetch(`${API_BASE}/api/chat`, {
-      method: 'POST',
-      headers: {
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        // No Content-Type — browser sets multipart boundary automatically
-      },
-      body: fd,
-    });
-
-    const data = await res.json().catch(() => ({}));
-
-    if (t) t.remove();
-
-    if (!res.ok) {
-      addBubble(data.message || 'Something went wrong. Please try again.', false);
-      return;
-    }
-
-    addBubble(data.reply || data.message || "I'm currently unavailable. Please try again.", false);
-  } catch (err) {
-    if (t) t.remove();
-    addBubble("Couldn't reach the server. Please check your connection and try again.", false);
-  }
+  const data = await api('/api/chat', 'POST', { message: msg });
+  if (t) t.remove();
+  addBubble(data.reply || data.message || 'I\'m currently unavailable. Please try again.', false);
 }
 
 // ─── BOOKINGS ─────────────────────────────────────────────────────────────

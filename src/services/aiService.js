@@ -1,113 +1,61 @@
-const OpenAI = require("openai");
+const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
 
-// ─── LLM CLIENT FACTORY ─────────────────────────────────────────────────
-// Creates an OpenAI-compatible client for any provider.
-function makeClient(baseURL, apiKey) {
-  if (!baseURL || !apiKey) return null;
-  return new OpenAI({ baseURL, apiKey, timeout: 30_000 });
-}
+const MODELS = ["openai/gpt-oss-120b", "openai/gpt-oss-20b"];
 
-// Lazy-init: created once on first call
-let _primary = undefined;
-let _fallback = undefined;
-
-function getPrimary() {
-  if (_primary === undefined) {
-    _primary = makeClient(process.env.LLM_BASE_URL, process.env.LLM_API_KEY);
-  }
-  return _primary;
-}
-
-function getFallback() {
-  if (_fallback === undefined) {
-    _fallback = makeClient(
-      process.env.FALLBACK_BASE_URL || "https://api.groq.com/openai/v1",
-      process.env.FALLBACK_API_KEY || process.env.GROK_API_KEY
-    );
-  }
-  return _fallback;
-}
-
-function getPrimaryModel() {
-  return process.env.LLM_MODEL || "claude-opus-5.5";
-}
-
-function getFallbackModel() {
-  return process.env.FALLBACK_MODEL || "openai/gpt-oss-120b";
-}
-
-// ─── RETRYABLE STATUS CODES ─────────────────────────────────────────────
-const RETRY_STATUSES = new Set([401, 402, 429, 500, 502, 503, 504]);
-
-function shouldFallback(err) {
-  const status = err?.status || err?.response?.status;
-  if (status && RETRY_STATUSES.has(status)) return true;
-  // Timeout / network errors
-  if (err?.code === "ETIMEDOUT" || err?.code === "ECONNABORTED") return true;
-  if (err?.message?.toLowerCase().includes("timeout")) return true;
-  return false;
-}
-
-// ─── CORE LLM CALL (with automatic fallback) ────────────────────────────
-async function llmChat(messages, maxTokens = 600) {
-  const primary = getPrimary();
-  const fallback = getFallback();
-
-  if (!primary && !fallback) {
-    console.warn("[AI] No LLM provider configured (both primary and fallback keys missing)");
+async function groqChat(messages, maxTokens = 600) {
+  const apiKey = process.env.GROK_API_KEY;
+  if (!apiKey) {
+    console.warn("[AI] GROK_API_KEY is not set in environment");
     return null;
   }
 
-  // Try primary
-  if (primary) {
+  let lastError = null;
+
+  for (const model of MODELS) {
     try {
-      console.log(`[AI] Calling primary (${getPrimaryModel()})`);
-      const res = await primary.chat.completions.create({
-        model: getPrimaryModel(),
-        messages,
-        temperature: 0.7,
-        max_tokens: maxTokens,
+      console.log(`[AI] Trying model: ${model}`);
+      const res = await fetch(GROQ_API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify({
+          model,
+          messages,
+          temperature: 0.7,
+          max_tokens: maxTokens,
+        }),
       });
-      const text = res.choices?.[0]?.message?.content;
+
+      if (!res.ok) {
+        const body = await res.text().catch(() => "");
+        console.error(`[AI] Groq ${res.status} with ${model}: ${body.slice(0, 200)}`);
+        lastError = new Error(`Groq ${res.status}: ${body.slice(0, 200)}`);
+        if ([401, 403, 429].includes(res.status)) break;
+        continue;
+      }
+
+      const data = await res.json();
+      const text = data.choices?.[0]?.message?.content;
       if (text) {
-        console.log(`[AI] ✓ Primary success (${text.length} chars)`);
+        console.log(`[AI] Success with model: ${model} (${text.length} chars)`);
         return text;
       }
     } catch (err) {
-      console.error(`[AI] Primary failed (${err.status || err.code || "unknown"}): ${(err.message || "").slice(0, 150)}`);
-      if (!shouldFallback(err) || !fallback) throw err;
-      console.log("[AI] Falling back to secondary provider...");
+      console.error(`[AI] Fetch error with ${model}:`, err.message);
+      lastError = err;
     }
   }
 
-  // Try fallback
-  if (fallback) {
-    try {
-      console.log(`[AI] Calling fallback (${getFallbackModel()})`);
-      const res = await fallback.chat.completions.create({
-        model: getFallbackModel(),
-        messages,
-        temperature: 0.7,
-        max_tokens: maxTokens,
-      });
-      const text = res.choices?.[0]?.message?.content;
-      if (text) {
-        console.log(`[AI] ✓ Fallback success (${text.length} chars)`);
-        return text;
-      }
-    } catch (err) {
-      console.error(`[AI] Fallback also failed (${err.status || err.code || "unknown"}): ${(err.message || "").slice(0, 150)}`);
-      throw err;
-    }
-  }
-
+  if (lastError) throw lastError;
   return null;
 }
 
 // ─── DAILY INSIGHT (called when user submits a check-in) ─────────────────
 exports.generateDailyInsight = async (payload) => {
-  if (!getPrimary() && !getFallback()) {
-    console.warn("[AI] Skipping daily insight — no provider configured");
+  if (!process.env.GROK_API_KEY) {
+    console.warn("[AI] Skipping daily insight — no API key");
     return buildLocalInsight(payload);
   }
 
@@ -118,7 +66,7 @@ exports.generateDailyInsight = async (payload) => {
     const energy = labels[payload.energyScore] || payload.energyScore;
     const sleep = labels[payload.sleepScore] || payload.sleepScore;
 
-    const reply = await llmChat([
+    const reply = await groqChat([
       {
         role: "system",
         content: "You are a supportive wellness companion. Give short, practical, non-clinical feedback. Never diagnose. Be warm."
@@ -143,8 +91,8 @@ NOTE: [1 sentence on when to seek help, only if relevant]`
 
 // ─── TREND ANALYSIS (called for the trends/report page) ──────────────────
 exports.generateTrendAnalysis = async (reportData) => {
-  if (!getPrimary() && !getFallback()) {
-    console.warn("[AI] Skipping trend analysis — no provider configured");
+  if (!process.env.GROK_API_KEY) {
+    console.warn("[AI] Skipping trend analysis — no API key");
     return buildLocalTrendAnalysis(reportData);
   }
 
@@ -158,7 +106,7 @@ exports.generateTrendAnalysis = async (reportData) => {
 
     const trendDirection = (series || []).length >= 3 ? detectTrend(series) : "insufficient data";
 
-    const reply = await llmChat([
+    const reply = await groqChat([
       {
         role: "system",
         content: `You are a wellness data analyst in a mood tracking app. Provide honest, detailed analysis of the user's mental wellness trends. Be specific with numbers. Structure your response clearly. Never diagnose medical conditions. Reference actual data points. Be encouraging but truthful.`
@@ -197,8 +145,8 @@ Give me a detailed analysis in this format with a good looking typography and fo
   }
 };
 
-// ─── CHAT (supports optional file content parts) ─────────────────────────
-exports.safeChatReply = async (message, contentParts = null) => {
+// ─── CHAT ────────────────────────────────────────────────────────────────
+exports.safeChatReply = async (message) => {
   const crisisKeywords = [
     "suicide", "self-harm", "self harm", "kill myself", "i want to die",
     "i want die", "end my life", "hurt myself", "harm myself", "overdose",
@@ -219,42 +167,22 @@ exports.safeChatReply = async (message, contentParts = null) => {
     };
   }
 
-  if (!getPrimary() && !getFallback()) {
-    return { reply: "Hello, Lay your burdens here, Speak and let me walk beside your thoughts?", safetyFlag: false };
-  }
+  if (!process.env.GROK_API_KEY) return { reply: "Hello, Lay your burdens here, Speak and let me walk beside your thoughts?", safetyFlag: false };
 
   try {
-    // Build the user content — plain text or multimodal content parts
-    let userContent;
-    if (contentParts && contentParts.length > 0) {
-      // Multimodal: text + image_url / extracted file text
-      userContent = contentParts;
-    } else {
-      userContent = message;
-    }
-
-    const reply = await llmChat([
+    const reply = await groqChat([
       {
         role: "system",
         content:
-          `You are MindTrack AI — a warm, thoughtful companion who genuinely cares. ` +
-          `You can talk about anything the user wants: their day, feelings, relationships, work, hobbies, dreams, or just casual chat. ` +
-          `Be natural, empathetic, and real — like a close friend who truly listens. ` +
-          `Ask thoughtful follow-up questions when it feels right, but don't over-question. ` +
-          `You can be playful, serious, philosophical, or comforting — match the user's energy. ` +
-          `Keep responses concise but meaningful (a few sentences, more when the topic needs depth). ` +
-          `\n\n` +
-          `🛡️ Safety: If a user expresses thoughts of self-harm, suicide, or being in crisis, ` +
-          `respond with genuine warmth and care. Gently encourage them to reach out to someone they trust ` +
-          `or a local helpline. Never provide instructions that could cause harm.`
+          "You are a caring friend and supportive counselor. Respond in a warm, empathetic tone, keeping replies brief (1-2 sentences or more when needed ). Offer gentle advice, ask follow‑up questions but not too unnecessary and too much, and never give medical diagnoses which you think only doctor can give."
       },
-      { role: "user", content: userContent },
-    ], 500);
+      { role: "user", content: message },
+    ], 200);
 
     return { reply: reply || "I hear you. Would you like to talk more about it?", safetyFlag: false };
   } catch (err) {
     console.error("[AI] Chat error:", err.message);
-    return { reply: "I'm here to listen, speak freely and let me stand by your side. Could you tell me more about how your world is going?", safetyFlag: false };
+    return { reply: "I'm here to listen, speak freely and let be stand by your side. Could you tell me more about how is your world going?", safetyFlag: false };
   }
 };
 
